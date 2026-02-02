@@ -20,7 +20,12 @@ const Login = () => {
 
             if (response.data.token) {
                 localStorage.setItem('user', JSON.stringify(response.data));
-                navigate('/dashboard');
+
+                if (response.data.needsProfile) {
+                    navigate('/complete-profile');
+                } else {
+                    navigate('/dashboard');
+                }
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');

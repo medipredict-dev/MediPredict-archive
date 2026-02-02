@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Role = require('../models/Role');
+const PlayerProfile = require('../models/PlayerProfile');
 const generateToken = require('../utils/generateToken');
 
 // @desc    Register new user
@@ -68,12 +69,23 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email }).select('+password').populate('roles');
 
         if (user && (await user.matchPassword(password))) {
+            let needsProfile = false;
+            // Check if user has 'Player' role and if they have a profile
+            const isPlayer = user.roles.some(role => role.name === 'Player');
+            if (isPlayer) {
+                const profile = await PlayerProfile.findOne({ userId: user._id });
+                if (!profile) {
+                    needsProfile = true;
+                }
+            }
+
             res.json({
                 _id: user.id,
                 name: user.name,
                 email: user.email,
                 roles: user.roles,
                 token: generateToken(user._id),
+                needsProfile
             });
         } else {
             res.status(400).json({ message: 'Invalid credentials' });
