@@ -21,6 +21,8 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/roles', require('./routes/roleRoutes'));
 app.use('/api/player-profile', require('./routes/playerProfileRoutes'));
+app.use('/api/coach', require('./routes/coachRoutes'));
+app.use('/api/medical', require('./routes/medicalRoutes'));
 
 // Root route
 app.get('/', (req, res) => {
