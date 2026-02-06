@@ -8,6 +8,21 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // Helper function to determine dashboard based on role
+    const getDashboardByRole = (roles) => {
+        if (!roles || roles.length === 0) return '/dashboard';
+        
+        // Check role names (roles is array of objects with name property)
+        const roleNames = roles.map(r => r.name || r);
+        
+        if (roleNames.includes('Admin')) return '/dashboard';
+        if (roleNames.includes('Coach')) return '/coach-dashboard';
+        if (roleNames.includes('Medical')) return '/medical-dashboard';
+        if (roleNames.includes('Player')) return '/dashboard';
+        
+        return '/dashboard';
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
@@ -24,7 +39,9 @@ const Login = () => {
                 if (response.data.needsProfile) {
                     navigate('/complete-profile');
                 } else {
-                    navigate('/dashboard');
+                    // Redirect based on user role
+                    const dashboard = getDashboardByRole(response.data.roles);
+                    navigate(dashboard);
                 }
             }
         } catch (err) {

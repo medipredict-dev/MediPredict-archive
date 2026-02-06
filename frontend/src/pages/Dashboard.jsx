@@ -60,6 +60,21 @@ const Dashboard = () => {
                         <p style={{ color: 'blue' }}>View your Injury Predictions here.</p>
                     }
                 </div>
+
+                {/* Role-based Dashboard Links */}
+                <div style={styles.dashboardLinks}>
+                    <h3>Quick Access</h3>
+                    {user.roles && (JSON.stringify(user.roles).includes('Coach') || JSON.stringify(user.roles).includes('Admin')) && (
+                        <a href="/coach-dashboard" style={styles.dashboardLink}>
+                            🏆 Go to Coach Dashboard
+                        </a>
+                    )}
+                    {user.roles && (JSON.stringify(user.roles).includes('Medical') || JSON.stringify(user.roles).includes('Admin')) && (
+                        <a href="/medical-dashboard" style={styles.dashboardLink}>
+                            🏥 Go to Medical Dashboard
+                        </a>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -114,6 +129,23 @@ const styles = {
         padding: '15px',
         borderLeft: '4px solid #007bff',
         backgroundColor: '#f1f8ff'
+    },
+    dashboardLinks: {
+        marginTop: '30px',
+        padding: '20px',
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    },
+    dashboardLink: {
+        display: 'block',
+        padding: '12px 20px',
+        marginTop: '10px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '4px',
+        textAlign: 'center'
     }
 };
 

@@ -5,6 +5,8 @@ import Register from './components/Register';
 import CompleteProfile from './components/CompleteProfile';
 import Dashboard from './pages/Dashboard';
 import MainPage from './pages/MainPage';
+import CoachDashboard from './pages/CoachDashboard';
+import MedicalDashboard from './pages/MedicalDashboard';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/coach-dashboard" element={<CoachDashboard />} />
+          <Route path="/medical-dashboard" element={<MedicalDashboard />} />
         </Routes>
       </div>
     </Router>
