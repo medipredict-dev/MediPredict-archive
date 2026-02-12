@@ -40,6 +40,8 @@ const importData = async () => {
 
         const adminRole = createdRoles.find(r => r.name === 'Admin');
         const playerRole = createdRoles.find(r => r.name === 'Player');
+        const coachRole = createdRoles.find(r => r.name === 'Coach');
+        const medicalRole = createdRoles.find(r => r.name === 'Medical');
 
         const users = [
             {
@@ -55,6 +57,35 @@ const importData = async () => {
                 roles: [playerRole._id],
                 team: 'Raiders',
                 position: 'Forward'
+            },
+            {
+                name: 'Coach Williams',
+                email: 'coach@example.com',
+                password: 'password123',
+                roles: [coachRole._id],
+                team: 'Raiders'
+            },
+            {
+                name: 'Dr. Sarah Medical',
+                email: 'medical@example.com',
+                password: 'password123',
+                roles: [medicalRole._id]
+            },
+            {
+                name: 'Mike Johnson',
+                email: 'mike@example.com',
+                password: 'password123',
+                roles: [playerRole._id],
+                team: 'Raiders',
+                position: 'Midfielder'
+            },
+            {
+                name: 'Alex Smith',
+                email: 'alex@example.com',
+                password: 'password123',
+                roles: [playerRole._id],
+                team: 'Raiders',
+                position: 'Defender'
             }
         ];
 
