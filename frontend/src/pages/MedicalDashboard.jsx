@@ -32,14 +32,14 @@ const MedicalDashboard = () => {
             navigate('/login');
             return;
         }
-        
+
         const userData = JSON.parse(storedUser);
         setUser(userData);
 
-        const isMedical = userData.roles?.some(role => 
+        const isMedical = userData.roles?.some(role =>
             role.name === 'Medical' || role.name === 'Admin'
         );
-        
+
         if (!isMedical) {
             navigate('/dashboard');
             return;
@@ -124,7 +124,7 @@ const MedicalDashboard = () => {
 
     const handleDeleteInjury = async (injuryId) => {
         if (!window.confirm('Are you sure you want to delete this injury record?')) return;
-        
+
         try {
             const token = user?.token;
             const config = {
@@ -198,7 +198,7 @@ const MedicalDashboard = () => {
     }
 
     return (
-        <div>
+        <div style={styles.container}>
             {/* Header */}
             <header className="dashboard-header">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -224,9 +224,14 @@ const MedicalDashboard = () => {
                         <p style={{ color: 'var(--color-navy)', fontSize: '1.1rem', marginTop: '0.5rem' }}>
                             Manage player injuries, track recovery progress, and maintain comprehensive medical records for the team.
                         </p>
-                        <button onClick={() => setShowAddModal(true)} className="button-primary" style={{ marginTop: '1rem' }}>
-                            + Add New Injury Record
-                        </button>
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                            <button onClick={() => setShowAddModal(true)} className="button-primary">
+                                + Add New Injury Record
+                            </button>
+                            <button onClick={() => navigate('/predictions')} className="button-primary">
+                                🤖 Open AI Prediction Module
+                            </button>
+                        </div>
                     </div>
                 </section>
 
@@ -255,17 +260,17 @@ const MedicalDashboard = () => {
                 {/* Injury Records Table */}
                 <section>
                     <h3 style={{ color: 'var(--color-navy)' }}>Injury Records</h3>
-                    <div style={{ background: 'var(--color-white)', borderRadius: '1rem', boxShadow: '0 2px 8px rgba(32,40,94,0.07)', padding: '1rem' }}>
+                    <div style={{ background: 'var(--color-white)', borderRadius: '1rem', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', padding: '1rem', border: '1px solid var(--color-border)' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
-                                <tr style={{ background: 'var(--color-gray)' }}>
-                                    <th style={{ padding: '0.7rem' }}>Player</th>
-                                    <th style={{ padding: '0.7rem' }}>Injury</th>
-                                    <th style={{ padding: '0.7rem' }}>Body Part</th>
-                                    <th style={{ padding: '0.7rem' }}>Severity</th>
-                                    <th style={{ padding: '0.7rem' }}>Status</th>
-                                    <th style={{ padding: '0.7rem' }}>Recovery Days</th>
-                                    <th style={{ padding: '0.7rem' }}>Actions</th>
+                                <tr style={{ background: 'var(--color-gray)', borderBottom: '1px solid var(--color-border)' }}>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Player</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Injury</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Body Part</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Severity</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Status</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Recovery Days</th>
+                                    <th style={{ padding: '0.7rem', color: 'var(--color-muted)', fontWeight: '500' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -282,8 +287,8 @@ const MedicalDashboard = () => {
                                         </td>
                                         <td style={{ padding: '0.7rem' }}>{injury.predictedRecoveryDays ?? '-'}</td>
                                         <td style={{ padding: '0.7rem' }}>
-                                            <button onClick={() => handleEditInjury(injury)} className="button-primary" style={{ marginRight: '0.5rem', padding: '0.3rem 1rem' }}>Edit</button>
-                                            <button onClick={() => handleDeleteInjury(injury._id)} className="button-primary" style={{ background: 'var(--color-lime)', color: 'var(--color-navy)', padding: '0.3rem 1rem' }}>Delete</button>
+                                            <button onClick={() => openEditModal(injury)} className="button-primary" style={{ marginRight: '0.5rem', padding: '0.3rem 1rem', background: 'transparent', color: 'var(--color-muted)', border: '1px solid var(--color-border)', boxShadow: 'none' }}>Edit</button>
+                                            <button onClick={() => handleDeleteInjury(injury._id)} className="button-primary" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid #ef4444', padding: '0.3rem 1rem', boxShadow: 'none' }}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -294,322 +299,326 @@ const MedicalDashboard = () => {
             </main>
 
             {/* Add Injury Modal */}
-            {showAddModal && (
-                <div style={styles.modalOverlay}>
-                    <div style={styles.modal}>
-                        <h2 style={styles.modalTitle}>Add New Injury Record</h2>
-                        <form onSubmit={handleAddInjury}>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Player</label>
-                                <select
-                                    name="playerId"
-                                    value={formData.playerId}
-                                    onChange={handleInputChange}
-                                    style={styles.select}
-                                    required
-                                >
-                                    <option value="">Select Player</option>
-                                    {players.map(player => (
-                                        <option key={player._id} value={player._id}>
-                                            {player.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div style={styles.formRow}>
+            {
+                showAddModal && (
+                    <div style={styles.modalOverlay}>
+                        <div style={styles.modal}>
+                            <h2 style={styles.modalTitle}>Add New Injury Record</h2>
+                            <form onSubmit={handleAddInjury}>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Injury Type</label>
+                                    <label style={styles.label}>Player</label>
                                     <select
-                                        name="injuryType"
-                                        value={formData.injuryType}
+                                        name="playerId"
+                                        value={formData.playerId}
                                         onChange={handleInputChange}
                                         style={styles.select}
                                         required
                                     >
-                                        <option value="">Select Injury Type</option>
-                                        <option value="Muscle Strain">Muscle Strain</option>
-                                        <option value="Ligament Sprain">Ligament Sprain</option>
-                                        <option value="Fracture">Fracture</option>
-                                        <option value="Concussion">Concussion</option>
-                                        <option value="Tendinitis">Tendinitis</option>
-                                        <option value="Dislocation">Dislocation</option>
-                                        <option value="Contusion">Contusion</option>
-                                        <option value="Other">Other</option>
+                                        <option value="">Select Player</option>
+                                        {players.map(player => (
+                                            <option key={player._id} value={player._id}>
+                                                {player.name}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
+                                <div style={styles.formRow}>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Injury Type</label>
+                                        <select
+                                            name="injuryType"
+                                            value={formData.injuryType}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                            required
+                                        >
+                                            <option value="">Select Injury Type</option>
+                                            <option value="Muscle Strain">Muscle Strain</option>
+                                            <option value="Ligament Sprain">Ligament Sprain</option>
+                                            <option value="Fracture">Fracture</option>
+                                            <option value="Concussion">Concussion</option>
+                                            <option value="Tendinitis">Tendinitis</option>
+                                            <option value="Dislocation">Dislocation</option>
+                                            <option value="Contusion">Contusion</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Body Part</label>
+                                        <select
+                                            name="bodyPart"
+                                            value={formData.bodyPart}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                            required
+                                        >
+                                            <option value="">Select Body Part</option>
+                                            <option value="Head">Head</option>
+                                            <option value="Neck">Neck</option>
+                                            <option value="Shoulder">Shoulder</option>
+                                            <option value="Arm">Arm</option>
+                                            <option value="Elbow">Elbow</option>
+                                            <option value="Wrist">Wrist</option>
+                                            <option value="Hand">Hand</option>
+                                            <option value="Back">Back</option>
+                                            <option value="Hip">Hip</option>
+                                            <option value="Thigh">Thigh</option>
+                                            <option value="Knee">Knee</option>
+                                            <option value="Ankle">Ankle</option>
+                                            <option value="Foot">Foot</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style={styles.formRow}>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Severity</label>
+                                        <select
+                                            name="severity"
+                                            value={formData.severity}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                        >
+                                            <option value="Minor">Minor</option>
+                                            <option value="Moderate">Moderate</option>
+                                            <option value="Severe">Severe</option>
+                                            <option value="Critical">Critical</option>
+                                        </select>
+                                    </div>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Status</label>
+                                        <select
+                                            name="status"
+                                            value={formData.status}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                        >
+                                            <option value="Active">Active</option>
+                                            <option value="Recovering">Recovering</option>
+                                            <option value="Healed">Healed</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Body Part</label>
-                                    <select
-                                        name="bodyPart"
-                                        value={formData.bodyPart}
+                                    <label style={styles.label}>Description *</label>
+                                    <textarea
+                                        name="description"
+                                        value={formData.description}
                                         onChange={handleInputChange}
-                                        style={styles.select}
+                                        style={styles.textarea}
+                                        placeholder="Describe the injury in detail..."
+                                        rows="2"
                                         required
-                                    >
-                                        <option value="">Select Body Part</option>
-                                        <option value="Head">Head</option>
-                                        <option value="Neck">Neck</option>
-                                        <option value="Shoulder">Shoulder</option>
-                                        <option value="Arm">Arm</option>
-                                        <option value="Elbow">Elbow</option>
-                                        <option value="Wrist">Wrist</option>
-                                        <option value="Hand">Hand</option>
-                                        <option value="Back">Back</option>
-                                        <option value="Hip">Hip</option>
-                                        <option value="Thigh">Thigh</option>
-                                        <option value="Knee">Knee</option>
-                                        <option value="Ankle">Ankle</option>
-                                        <option value="Foot">Foot</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div style={styles.formRow}>
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>Severity</label>
-                                    <select
-                                        name="severity"
-                                        value={formData.severity}
-                                        onChange={handleInputChange}
-                                        style={styles.select}
-                                    >
-                                        <option value="Minor">Minor</option>
-                                        <option value="Moderate">Moderate</option>
-                                        <option value="Severe">Severe</option>
-                                        <option value="Critical">Critical</option>
-                                    </select>
+                                    />
                                 </div>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Status</label>
-                                    <select
-                                        name="status"
-                                        value={formData.status}
+                                    <label style={styles.label}>Treatment</label>
+                                    <textarea
+                                        name="treatment"
+                                        value={formData.treatment}
                                         onChange={handleInputChange}
-                                        style={styles.select}
-                                    >
-                                        <option value="Active">Active</option>
-                                        <option value="Recovering">Recovering</option>
-                                        <option value="Healed">Healed</option>
-                                    </select>
+                                        style={styles.textarea}
+                                        placeholder="Describe the treatment plan..."
+                                        rows="3"
+                                    />
                                 </div>
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Description *</label>
-                                <textarea
-                                    name="description"
-                                    value={formData.description}
-                                    onChange={handleInputChange}
-                                    style={styles.textarea}
-                                    placeholder="Describe the injury in detail..."
-                                    rows="2"
-                                    required
-                                />
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Treatment</label>
-                                <textarea
-                                    name="treatment"
-                                    value={formData.treatment}
-                                    onChange={handleInputChange}
-                                    style={styles.textarea}
-                                    placeholder="Describe the treatment plan..."
-                                    rows="3"
-                                />
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Expected Recovery Days</label>
-                                <input
-                                    type="number"
-                                    name="expectedRecoveryDays"
-                                    value={formData.expectedRecoveryDays}
-                                    onChange={handleInputChange}
-                                    style={styles.input}
-                                    placeholder="e.g., 14"
-                                />
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Notes</label>
-                                <textarea
-                                    name="notes"
-                                    value={formData.notes}
-                                    onChange={handleInputChange}
-                                    style={styles.textarea}
-                                    placeholder="Additional notes..."
-                                    rows="2"
-                                />
-                            </div>
-                            <div style={styles.modalActions}>
-                                <button 
-                                    type="button" 
-                                    onClick={() => { setShowAddModal(false); resetForm(); }}
-                                    style={styles.cancelBtn}
-                                >
-                                    Cancel
-                                </button>
-                                <button type="submit" style={styles.submitBtn}>
-                                    Add Injury
-                                </button>
-                            </div>
-                        </form>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Expected Recovery Days</label>
+                                    <input
+                                        type="number"
+                                        name="expectedRecoveryDays"
+                                        value={formData.expectedRecoveryDays}
+                                        onChange={handleInputChange}
+                                        style={styles.input}
+                                        placeholder="e.g., 14"
+                                    />
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Notes</label>
+                                    <textarea
+                                        name="notes"
+                                        value={formData.notes}
+                                        onChange={handleInputChange}
+                                        style={styles.textarea}
+                                        placeholder="Additional notes..."
+                                        rows="2"
+                                    />
+                                </div>
+                                <div style={styles.modalActions}>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setShowAddModal(false); resetForm(); }}
+                                        style={styles.cancelBtn}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" style={styles.submitBtn}>
+                                        Add Injury
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Edit Injury Modal */}
-            {showEditModal && (
-                <div style={styles.modalOverlay}>
-                    <div style={styles.modal}>
-                        <h2 style={styles.modalTitle}>Edit Injury Record</h2>
-                        <form onSubmit={handleUpdateInjury}>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Player</label>
-                                <select
-                                    name="playerId"
-                                    value={formData.playerId}
-                                    onChange={handleInputChange}
-                                    style={styles.select}
-                                    required
-                                >
-                                    <option value="">Select Player</option>
-                                    {players.map(player => (
-                                        <option key={player._id} value={player._id}>
-                                            {player.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div style={styles.formRow}>
+            {
+                showEditModal && (
+                    <div style={styles.modalOverlay}>
+                        <div style={styles.modal}>
+                            <h2 style={styles.modalTitle}>Edit Injury Record</h2>
+                            <form onSubmit={handleUpdateInjury}>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Injury Type</label>
+                                    <label style={styles.label}>Player</label>
                                     <select
-                                        name="injuryType"
-                                        value={formData.injuryType}
+                                        name="playerId"
+                                        value={formData.playerId}
                                         onChange={handleInputChange}
                                         style={styles.select}
                                         required
                                     >
-                                        <option value="">Select Injury Type</option>
-                                        <option value="Muscle Strain">Muscle Strain</option>
-                                        <option value="Ligament Sprain">Ligament Sprain</option>
-                                        <option value="Fracture">Fracture</option>
-                                        <option value="Concussion">Concussion</option>
-                                        <option value="Tendinitis">Tendinitis</option>
-                                        <option value="Dislocation">Dislocation</option>
-                                        <option value="Contusion">Contusion</option>
-                                        <option value="Other">Other</option>
+                                        <option value="">Select Player</option>
+                                        {players.map(player => (
+                                            <option key={player._id} value={player._id}>
+                                                {player.name}
+                                            </option>
+                                        ))}
                                     </select>
+                                </div>
+                                <div style={styles.formRow}>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Injury Type</label>
+                                        <select
+                                            name="injuryType"
+                                            value={formData.injuryType}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                            required
+                                        >
+                                            <option value="">Select Injury Type</option>
+                                            <option value="Muscle Strain">Muscle Strain</option>
+                                            <option value="Ligament Sprain">Ligament Sprain</option>
+                                            <option value="Fracture">Fracture</option>
+                                            <option value="Concussion">Concussion</option>
+                                            <option value="Tendinitis">Tendinitis</option>
+                                            <option value="Dislocation">Dislocation</option>
+                                            <option value="Contusion">Contusion</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Body Part</label>
+                                        <select
+                                            name="bodyPart"
+                                            value={formData.bodyPart}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                            required
+                                        >
+                                            <option value="">Select Body Part</option>
+                                            <option value="Head">Head</option>
+                                            <option value="Neck">Neck</option>
+                                            <option value="Shoulder">Shoulder</option>
+                                            <option value="Arm">Arm</option>
+                                            <option value="Elbow">Elbow</option>
+                                            <option value="Wrist">Wrist</option>
+                                            <option value="Hand">Hand</option>
+                                            <option value="Back">Back</option>
+                                            <option value="Hip">Hip</option>
+                                            <option value="Thigh">Thigh</option>
+                                            <option value="Knee">Knee</option>
+                                            <option value="Ankle">Ankle</option>
+                                            <option value="Foot">Foot</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style={styles.formRow}>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Severity</label>
+                                        <select
+                                            name="severity"
+                                            value={formData.severity}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                        >
+                                            <option value="Minor">Minor</option>
+                                            <option value="Moderate">Moderate</option>
+                                            <option value="Severe">Severe</option>
+                                            <option value="Critical">Critical</option>
+                                        </select>
+                                    </div>
+                                    <div style={styles.formGroup}>
+                                        <label style={styles.label}>Status</label>
+                                        <select
+                                            name="status"
+                                            value={formData.status}
+                                            onChange={handleInputChange}
+                                            style={styles.select}
+                                        >
+                                            <option value="Active">Active</option>
+                                            <option value="Recovering">Recovering</option>
+                                            <option value="Healed">Healed</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Body Part</label>
-                                    <select
-                                        name="bodyPart"
-                                        value={formData.bodyPart}
+                                    <label style={styles.label}>Treatment</label>
+                                    <textarea
+                                        name="treatment"
+                                        value={formData.treatment}
                                         onChange={handleInputChange}
-                                        style={styles.select}
-                                        required
-                                    >
-                                        <option value="">Select Body Part</option>
-                                        <option value="Head">Head</option>
-                                        <option value="Neck">Neck</option>
-                                        <option value="Shoulder">Shoulder</option>
-                                        <option value="Arm">Arm</option>
-                                        <option value="Elbow">Elbow</option>
-                                        <option value="Wrist">Wrist</option>
-                                        <option value="Hand">Hand</option>
-                                        <option value="Back">Back</option>
-                                        <option value="Hip">Hip</option>
-                                        <option value="Thigh">Thigh</option>
-                                        <option value="Knee">Knee</option>
-                                        <option value="Ankle">Ankle</option>
-                                        <option value="Foot">Foot</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div style={styles.formRow}>
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>Severity</label>
-                                    <select
-                                        name="severity"
-                                        value={formData.severity}
-                                        onChange={handleInputChange}
-                                        style={styles.select}
-                                    >
-                                        <option value="Minor">Minor</option>
-                                        <option value="Moderate">Moderate</option>
-                                        <option value="Severe">Severe</option>
-                                        <option value="Critical">Critical</option>
-                                    </select>
+                                        style={styles.textarea}
+                                        rows="3"
+                                    />
                                 </div>
                                 <div style={styles.formGroup}>
-                                    <label style={styles.label}>Status</label>
-                                    <select
-                                        name="status"
-                                        value={formData.status}
+                                    <label style={styles.label}>Expected Recovery Days</label>
+                                    <input
+                                        type="number"
+                                        name="expectedRecoveryDays"
+                                        value={formData.expectedRecoveryDays}
                                         onChange={handleInputChange}
-                                        style={styles.select}
-                                    >
-                                        <option value="Active">Active</option>
-                                        <option value="Recovering">Recovering</option>
-                                        <option value="Healed">Healed</option>
-                                    </select>
+                                        style={styles.input}
+                                    />
                                 </div>
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Treatment</label>
-                                <textarea
-                                    name="treatment"
-                                    value={formData.treatment}
-                                    onChange={handleInputChange}
-                                    style={styles.textarea}
-                                    rows="3"
-                                />
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Expected Recovery Days</label>
-                                <input
-                                    type="number"
-                                    name="expectedRecoveryDays"
-                                    value={formData.expectedRecoveryDays}
-                                    onChange={handleInputChange}
-                                    style={styles.input}
-                                />
-                            </div>
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>Notes</label>
-                                <textarea
-                                    name="notes"
-                                    value={formData.notes}
-                                    onChange={handleInputChange}
-                                    style={styles.textarea}
-                                    rows="2"
-                                />
-                            </div>
-                            <div style={styles.modalActions}>
-                                <button 
-                                    type="button" 
-                                    onClick={() => { setShowEditModal(false); setSelectedInjury(null); resetForm(); }}
-                                    style={styles.cancelBtn}
-                                >
-                                    Cancel
-                                </button>
-                                <button type="submit" style={styles.submitBtn}>
-                                    Update Injury
-                                </button>
-                            </div>
-                        </form>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>Notes</label>
+                                    <textarea
+                                        name="notes"
+                                        value={formData.notes}
+                                        onChange={handleInputChange}
+                                        style={styles.textarea}
+                                        rows="2"
+                                    />
+                                </div>
+                                <div style={styles.modalActions}>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setShowEditModal(false); setSelectedInjury(null); resetForm(); }}
+                                        style={styles.cancelBtn}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" style={styles.submitBtn}>
+                                        Update Injury
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
 const styles = {
     container: {
         minHeight: '100vh',
-        backgroundColor: '#f0f4f8',
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        backgroundColor: '#0b0f19',
+        fontFamily: "'Inter', system-ui, sans-serif"
     },
     loadingContainer: {
         minHeight: '100vh',
@@ -617,29 +626,30 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f0f4f8'
+        backgroundColor: '#0b0f19'
     },
     spinner: {
         width: '50px',
         height: '50px',
-        border: '4px solid #e5e7eb',
-        borderTop: '4px solid #166534',
+        border: '4px solid #1e293b',
+        borderTop: '4px solid #0ce88d',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite'
     },
     loadingText: {
         marginTop: '20px',
-        color: '#6b7280',
+        color: '#94a3b8',
         fontSize: '18px'
     },
     header: {
-        backgroundColor: '#166534',
-        color: 'white',
+        backgroundColor: '#131b26',
+        color: '#f8fafc',
         padding: '15px 30px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+        borderBottom: '1px solid #1e293b'
     },
     headerLeft: {
         display: 'flex',
@@ -649,10 +659,13 @@ const styles = {
     logo: {
         margin: 0,
         fontSize: '24px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#0ce88d'
     },
     roleTag: {
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: 'rgba(12, 232, 141, 0.1)',
+        color: '#0ce88d',
+        border: '1px solid #0ce88d',
         padding: '5px 12px',
         borderRadius: '20px',
         fontSize: '14px'
@@ -663,20 +676,22 @@ const styles = {
         gap: '20px'
     },
     welcomeText: {
-        fontSize: '16px'
+        fontSize: '16px',
+        color: '#f8fafc'
     },
     logoutBtn: {
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        color: 'white',
-        border: 'none',
+        backgroundColor: 'transparent',
+        color: '#f8fafc',
+        border: '1px solid #1e293b',
         padding: '8px 20px',
         borderRadius: '5px',
         cursor: 'pointer',
         fontSize: '14px'
     },
     error: {
-        backgroundColor: '#fecaca',
-        color: '#dc2626',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        color: '#ef4444',
+        border: '1px solid #ef4444',
         padding: '15px',
         margin: '20px 30px',
         borderRadius: '8px',
@@ -688,11 +703,12 @@ const styles = {
         margin: '0 auto'
     },
     welcomeSection: {
-        backgroundColor: 'white',
-        borderRadius: '15px',
+        backgroundColor: '#131b26',
+        borderRadius: '12px',
+        border: '1px solid #1e293b',
         padding: '30px',
         marginBottom: '30px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
     },
     welcomeContent: {
         display: 'flex',
@@ -705,23 +721,24 @@ const styles = {
     welcomeTitle: {
         margin: '0 0 15px 0',
         fontSize: '32px',
-        color: '#166534'
+        color: '#0ce88d'
     },
     welcomeSubtitle: {
         margin: '0 0 25px 0',
         fontSize: '18px',
-        color: '#6b7280',
+        color: '#94a3b8',
         lineHeight: '1.6'
     },
     addBtn: {
-        backgroundColor: '#166534',
-        color: 'white',
+        backgroundColor: '#0ce88d',
+        color: '#000',
         border: 'none',
         padding: '12px 25px',
         borderRadius: '8px',
         cursor: 'pointer',
         fontSize: '16px',
-        fontWeight: '600'
+        fontWeight: 'bold',
+        boxShadow: '0 4px 15px rgba(12, 232, 141, 0.2)'
     },
     statsSection: {
         marginBottom: '30px'
@@ -732,13 +749,14 @@ const styles = {
         gap: '20px'
     },
     statCard: {
-        backgroundColor: 'white',
+        backgroundColor: '#131b26',
+        border: '1px solid #1e293b',
         borderRadius: '12px',
         padding: '25px',
         display: 'flex',
         alignItems: 'center',
         gap: '20px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
     },
     statIcon: {
         fontSize: '40px'
@@ -748,23 +766,24 @@ const styles = {
         margin: '0 0 5px 0',
         fontSize: '36px',
         fontWeight: 'bold',
-        color: '#1e293b'
+        color: '#f8fafc'
     },
     statLabel: {
         margin: 0,
         fontSize: '14px',
-        color: '#6b7280'
+        color: '#94a3b8'
     },
     tableSection: {
-        backgroundColor: 'white',
-        borderRadius: '15px',
+        backgroundColor: '#131b26',
+        borderRadius: '12px',
+        border: '1px solid #1e293b',
         padding: '25px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+        boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
     },
     cardTitle: {
         margin: '0 0 20px 0',
         fontSize: '20px',
-        color: '#1e293b',
+        color: '#f8fafc',
         display: 'flex',
         alignItems: 'center',
         gap: '10px'
@@ -779,23 +798,23 @@ const styles = {
     th: {
         textAlign: 'left',
         padding: '15px',
-        backgroundColor: '#f8fafc',
-        color: '#64748b',
+        backgroundColor: 'transparent',
+        color: '#94a3b8',
         fontWeight: '600',
         fontSize: '14px',
-        borderBottom: '2px solid #e2e8f0'
+        borderBottom: '2px solid #1e293b'
     },
     tr: {
-        borderBottom: '1px solid #e2e8f0'
+        borderBottom: '1px solid #1e293b'
     },
     td: {
         padding: '15px',
-        color: '#334155'
+        color: '#f8fafc'
     },
     emptyRow: {
         textAlign: 'center',
         padding: '40px',
-        color: '#9ca3af'
+        color: '#94a3b8'
     },
     playerCell: {
         display: 'flex',
@@ -806,8 +825,9 @@ const styles = {
         width: '35px',
         height: '35px',
         borderRadius: '50%',
-        backgroundColor: '#166534',
-        color: 'white',
+        backgroundColor: '#131b26',
+        border: '1px solid #0ce88d',
+        color: '#0ce88d',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -825,18 +845,18 @@ const styles = {
         gap: '8px'
     },
     editBtn: {
-        backgroundColor: '#e0f2fe',
+        backgroundColor: 'transparent',
+        color: '#94a3b8',
         border: 'none',
         padding: '8px 12px',
-        borderRadius: '6px',
         cursor: 'pointer',
         fontSize: '14px'
     },
     deleteBtn: {
-        backgroundColor: '#fecaca',
+        backgroundColor: 'transparent',
+        color: '#ef4444',
         border: 'none',
         padding: '8px 12px',
-        borderRadius: '6px',
         cursor: 'pointer',
         fontSize: '14px'
     },
@@ -846,25 +866,27 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.75)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1000
     },
     modal: {
-        backgroundColor: 'white',
-        borderRadius: '15px',
+        backgroundColor: '#131b26',
+        borderRadius: '12px',
+        border: '1px solid #1e293b',
         padding: '30px',
         width: '100%',
         maxWidth: '600px',
         maxHeight: '90vh',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        color: '#f8fafc'
     },
     modalTitle: {
         margin: '0 0 25px 0',
         fontSize: '24px',
-        color: '#1e293b'
+        color: '#0ce88d'
     },
     formGroup: {
         marginBottom: '20px',
@@ -879,13 +901,15 @@ const styles = {
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: '600',
-        color: '#374151'
+        color: '#94a3b8'
     },
     input: {
         width: '100%',
         padding: '12px',
         borderRadius: '8px',
-        border: '1px solid #d1d5db',
+        border: '1px solid #1e293b',
+        backgroundColor: '#0f172a',
+        color: '#f8fafc',
         fontSize: '14px',
         boxSizing: 'border-box'
     },
@@ -893,16 +917,19 @@ const styles = {
         width: '100%',
         padding: '12px',
         borderRadius: '8px',
-        border: '1px solid #d1d5db',
+        border: '1px solid #1e293b',
+        backgroundColor: '#0f172a',
+        color: '#f8fafc',
         fontSize: '14px',
-        boxSizing: 'border-box',
-        backgroundColor: 'white'
+        boxSizing: 'border-box'
     },
     textarea: {
         width: '100%',
         padding: '12px',
         borderRadius: '8px',
-        border: '1px solid #d1d5db',
+        border: '1px solid #1e293b',
+        backgroundColor: '#0f172a',
+        color: '#f8fafc',
         fontSize: '14px',
         boxSizing: 'border-box',
         resize: 'vertical'
@@ -914,23 +941,25 @@ const styles = {
         marginTop: '25px'
     },
     cancelBtn: {
-        backgroundColor: '#e5e7eb',
-        color: '#374151',
-        border: 'none',
+        backgroundColor: 'transparent',
+        color: '#f8fafc',
+        border: '1px solid #1e293b',
         padding: '12px 25px',
         borderRadius: '8px',
         cursor: 'pointer',
-        fontSize: '14px'
+        fontSize: '14px',
+        fontWeight: 'bold'
     },
     submitBtn: {
-        backgroundColor: '#166534',
-        color: 'white',
+        backgroundColor: '#0ce88d',
+        color: '#000',
         border: 'none',
         padding: '12px 25px',
         borderRadius: '8px',
         cursor: 'pointer',
         fontSize: '14px',
-        fontWeight: '600'
+        fontWeight: 'bold',
+        boxShadow: '0 4px 15px rgba(12, 232, 141, 0.2)'
     }
 };
 

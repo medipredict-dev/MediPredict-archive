@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import MainPage from './pages/MainPage';
 import CoachDashboard from './pages/CoachDashboard';
 import MedicalDashboard from './pages/MedicalDashboard';
+import PredictionsPage from './pages/PredictionsPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/coach-dashboard" element={<CoachDashboard />} />
           <Route path="/medical-dashboard" element={<MedicalDashboard />} />
+          <Route path="/predictions" element={<PredictionsPage />} />
         </Routes>
       </div>
     </Router>
