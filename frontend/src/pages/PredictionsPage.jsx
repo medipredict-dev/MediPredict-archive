@@ -40,10 +40,7 @@ const PredictionsPage = () => {
     const fetchPredictions = async () => {
         try {
             setLoading(true);
-            const url = searchTerm
-                ? `/api/predictions?player=${searchTerm}`
-                : `/api/predictions`;
-            const res = await axios.get(`http://localhost:5000${url}`);
+            const res = await axios.get(`http://localhost:5000/api/predictions`);
             setPredictions(res.data);
         } catch (err) {
             console.error('Error fetching predictions:', err);
@@ -54,7 +51,15 @@ const PredictionsPage = () => {
 
     useEffect(() => {
         fetchPredictions();
-    }, [searchTerm]);
+    }, []);
+
+    // Filter predictions down based on search bar string
+    const filteredPredictions = predictions.filter(pred => {
+        if (!searchTerm) return true; // If search is empty, show all
+        const playerObj = MOCK_PLAYERS.find(p => p.id === String(pred.player?._id || pred.player));
+        const playerName = playerObj ? playerObj.name.toLowerCase() : 'unknown player';
+        return playerName.includes(searchTerm.toLowerCase());
+    });
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -344,7 +349,7 @@ const PredictionsPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {predictions.map(pred => (
+                                        {filteredPredictions.map(pred => (
                                             <tr key={pred._id} style={{ borderBottom: `1px solid ${theme.border}`, transition: 'background 0.2s' }}>
                                                 <td style={{ padding: '1rem 0.5rem' }}>
                                                     <div style={{ fontWeight: '600', color: theme.textMain }}>
