@@ -9,7 +9,7 @@ const Injury = require('../models/Injury');
 const getAllInjuries = async (req, res) => {
     try {
         const { status, severity, playerId } = req.query;
-        
+
         let filter = {};
         if (status) filter.status = status;
         if (severity) filter.severity = severity;
@@ -61,7 +61,10 @@ const addInjury = async (req, res) => {
             dateOfInjury,
             expectedRecoveryDays,
             treatment,
-            notes
+            notes,
+            treatedBy,
+            painLevel,
+            clearedForTraining
         } = req.body;
 
         // Verify player exists
@@ -104,6 +107,9 @@ const addInjury = async (req, res) => {
             expectedRecoveryDays,
             treatment,
             notes,
+            treatedBy,
+            painLevel,
+            clearedForTraining: clearedForTraining || false,
             addedBy: req.user._id,
             predictedRecoveryDays,
             riskLevel
@@ -136,7 +142,10 @@ const updateInjury = async (req, res) => {
             treatment,
             notes,
             actualRecoveryDate,
-            expectedRecoveryDays
+            expectedRecoveryDays,
+            treatedBy,
+            painLevel,
+            clearedForTraining
         } = req.body;
 
         // Update fields
@@ -145,6 +154,9 @@ const updateInjury = async (req, res) => {
         if (notes) injury.notes = notes;
         if (actualRecoveryDate) injury.actualRecoveryDate = actualRecoveryDate;
         if (expectedRecoveryDays) injury.expectedRecoveryDays = expectedRecoveryDays;
+        if (treatedBy !== undefined) injury.treatedBy = treatedBy;
+        if (painLevel !== undefined) injury.painLevel = painLevel;
+        if (clearedForTraining !== undefined) injury.clearedForTraining = clearedForTraining;
 
         // If status is changed to Recovered, set actual recovery date
         if (status === 'Recovered' && !injury.actualRecoveryDate) {
@@ -190,7 +202,7 @@ const deleteInjury = async (req, res) => {
 const getAllPlayers = async (req, res) => {
     try {
         const playerRole = await Role.findOne({ name: 'Player' });
-        
+
         if (!playerRole) {
             return res.status(404).json({ message: 'Player role not found' });
         }
@@ -255,11 +267,11 @@ const getMedicalStats = async (req, res) => {
     try {
         const playerRole = await Role.findOne({ name: 'Player' });
         const totalPlayers = await User.countDocuments({ roles: playerRole._id });
-        
+
         const allInjuries = await Injury.find();
         const activeInjuries = allInjuries.filter(i => i.status === 'Active');
         const recoveringInjuries = allInjuries.filter(i => i.status === 'Recovering');
-        
+
         // Group injuries by type
         const injuryByType = {};
         allInjuries.forEach(injury => {

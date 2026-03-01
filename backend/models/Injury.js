@@ -51,6 +51,21 @@ const injurySchema = mongoose.Schema({
         type: String,
         required: false
     },
+    treatedBy: {
+        type: String,
+        required: false,
+        trim: true
+    },
+    painLevel: {
+        type: Number,
+        required: false,
+        min: 1,
+        max: 10
+    },
+    clearedForTraining: {
+        type: Boolean,
+        default: false
+    },
     addedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
