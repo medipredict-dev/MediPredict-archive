@@ -11,13 +11,7 @@ const PredictionsPage = () => {
 
     const [formData, setFormData] = useState({
         player: '60d5ecb8b392d700153efabc', // Default dummy ObjectIds for testing
-        injury: '60d5ecb8b392d700153efabd',
-        predictedDays: 0,
-        confidenceScore: 80,
-        recoveryRangeMin: 0,
-        recoveryRangeMax: 0,
-        predictionDate: new Date().toISOString().split('T')[0],
-        status: 'Pending'
+        injury: '60d5ecb8b392d700153efabd'
     });
 
     const [editId, setEditId] = useState(null);
@@ -64,9 +58,6 @@ const PredictionsPage = () => {
         }));
     };
 
-    const handleSliderChange = (e) => {
-        setFormData(prev => ({ ...prev, confidenceScore: e.target.value }));
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -75,24 +66,21 @@ const PredictionsPage = () => {
                 if (!window.confirm('Are you sure you want to update this prediction record?')) return;
                 await axios.put(`http://localhost:5000/api/predictions/${editId}`, formData);
             } else {
-                if (!window.confirm('Are you sure you want to save this new prediction?')) return;
-                await axios.post(`http://localhost:5000/api/predictions`, formData);
+                if (!window.confirm('Generate an AI prediction for this player and injury?')) return;
+                await axios.post(`http://localhost:5000/api/predictions`, {
+                    player: formData.player,
+                    injury: formData.injury
+                });
             }
             setFormData({
                 player: MOCK_PLAYERS[0].id,
-                injury: MOCK_INJURIES[0].id,
-                predictedDays: 0,
-                confidenceScore: 80,
-                recoveryRangeMin: 0,
-                recoveryRangeMax: 0,
-                predictionDate: new Date().toISOString().split('T')[0],
-                status: 'Pending'
+                injury: MOCK_INJURIES[0].id
             });
             setEditId(null);
             fetchPredictions();
         } catch (err) {
             console.error('Error saving prediction', err);
-            alert(err.response?.data?.message || err.message || 'Failed to save prediction record.');
+            alert(err.response?.data?.message || err.message || 'Failed to generate AI prediction.');
         }
     };
 
@@ -100,13 +88,7 @@ const PredictionsPage = () => {
         setEditId(pred._id);
         setFormData({
             player: pred.player?._id || pred.player || MOCK_PLAYERS[0].id,
-            injury: pred.injury?._id || pred.injury || MOCK_INJURIES[0].id,
-            predictedDays: pred.predictedDays,
-            confidenceScore: pred.confidenceScore,
-            recoveryRangeMin: pred.recoveryRangeMin,
-            recoveryRangeMax: pred.recoveryRangeMax,
-            predictionDate: new Date(pred.predictionDate).toISOString().split('T')[0],
-            status: pred.status
+            injury: pred.injury?._id || pred.injury || MOCK_INJURIES[0].id
         });
     };
 
@@ -125,13 +107,7 @@ const PredictionsPage = () => {
         setEditId(null);
         setFormData({
             player: MOCK_PLAYERS[0].id,
-            injury: MOCK_INJURIES[0].id,
-            predictedDays: 0,
-            confidenceScore: 80,
-            recoveryRangeMin: 0,
-            recoveryRangeMax: 0,
-            predictionDate: new Date().toISOString().split('T')[0],
-            status: 'Pending'
+            injury: MOCK_INJURIES[0].id
         });
     };
 
@@ -215,50 +191,6 @@ const PredictionsPage = () => {
                                     {MOCK_INJURIES.map(i => (
                                         <option key={i.id} value={i.id}>{i.name}</option>
                                     ))}
-                                </select>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                {/* Control 3: Predicted Recovery Days (Number) */}
-                                <div style={{ flex: 1 }}>
-                                    <label style={labelStyle}>Predicted Days</label>
-                                    <input type="number" name="predictedDays" value={formData.predictedDays} onChange={handleInputChange} min="0" required style={inputStyle} />
-                                </div>
-
-                                {/* Control 4: Confidence Score (Slider) */}
-                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <label style={labelStyle}>
-                                        Confidence: <span style={{ color: theme.primary, fontWeight: 'bold' }}>{formData.confidenceScore}%</span>
-                                    </label>
-                                    <input type="range" name="confidenceScore" value={formData.confidenceScore} onChange={handleSliderChange} min="0" max="100" style={{ accentColor: theme.primary, marginTop: '0.4rem' }} />
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                {/* Control 5 & 6: Recovery Range Min & Max (Number) */}
-                                <div style={{ flex: 1 }}>
-                                    <label style={labelStyle}>Est. Min Days</label>
-                                    <input type="number" name="recoveryRangeMin" value={formData.recoveryRangeMin} onChange={handleInputChange} min="0" required style={inputStyle} />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <label style={labelStyle}>Est. Max Days</label>
-                                    <input type="number" name="recoveryRangeMax" value={formData.recoveryRangeMax} onChange={handleInputChange} min="0" required style={inputStyle} />
-                                </div>
-                            </div>
-
-                            {/* Control 7: Prediction Date (Date Picker) */}
-                            <div>
-                                <label style={labelStyle}>Date of Prediction</label>
-                                <input type="date" name="predictionDate" value={formData.predictionDate} onChange={handleInputChange} required style={inputStyle} />
-                            </div>
-
-                            {/* Control 8: Status (Dropdown) */}
-                            <div>
-                                <label style={labelStyle}>Verification Outcome</label>
-                                <select name="status" value={formData.status} onChange={handleInputChange} style={inputStyle}>
-                                    <option value="Pending">Pending Validation</option>
-                                    <option value="Accurate">Accurate</option>
-                                    <option value="Inaccurate">Inaccurate</option>
                                 </select>
                             </div>
 
