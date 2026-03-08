@@ -9,9 +9,23 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('Player');
+    const [coaches, setCoaches] = useState([]);
+    const [coachId, setCoachId] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        const fetchCoaches = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/users/coaches');
+                setCoaches(res.data);
+            } catch (err) {
+                console.error('Failed to fetch coaches', err);
+            }
+        };
+        fetchCoaches();
+    }, []);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -22,7 +36,8 @@ const Register = () => {
                 name,
                 email,
                 password,
-                roleName: role
+                roleName: role,
+                coachId: role === 'Player' ? coachId : undefined
             });
 
             if (response.data.token) {
@@ -87,7 +102,10 @@ const Register = () => {
                                 <label>Role</label>
                                 <select
                                     value={role}
-                                    onChange={(e) => setRole(e.target.value)}
+                                    onChange={(e) => {
+                                        setRole(e.target.value);
+                                        if (e.target.value !== 'Player') setCoachId('');
+                                    }}
                                 >
                                     <option value="Player">Player</option>
                                     <option value="Coach">Coach</option>
@@ -96,6 +114,22 @@ const Register = () => {
                                 </select>
                             </div>
                         </div>
+
+                        {role === 'Player' && (
+                            <div className="register-field" style={{ marginBottom: '1.5rem' }}>
+                                <label>Select Your Coach</label>
+                                <select
+                                    value={coachId}
+                                    onChange={(e) => setCoachId(e.target.value)}
+                                    required
+                                >
+                                    <option value="">-- Choose a Coach --</option>
+                                    {coaches.map(c => (
+                                        <option key={c._id} value={c._id}>{c.name} {c.team ? `(${c.team})` : ''}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         <div className="register-field">
                             <label>Email</label>
