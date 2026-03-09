@@ -14,7 +14,7 @@
     padding: 1rem 3rem;
     background: rgba(10, 15, 26, 0.85);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 255, 170, 0.08);
+    border-bottom: 1px solid hsla(160, 84%, 39%, );
     position: sticky;
     top: 0;
     z-index: 100;
@@ -28,7 +28,7 @@
 }
 
 .about-team-page .at-nav-brand .brand-icon {
-    color: #00ffaa;
+    color: var(--primary);
 }
 
 .about-team-page .at-nav-brand .brand-text {
@@ -39,7 +39,7 @@
 }
 
 .about-team-page .at-nav-brand .brand-highlight {
-    color: #00ffaa;
+    color: var(--primary);
 }
 
 .about-team-page .at-back-btn {
@@ -47,10 +47,10 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.55rem 1.2rem;
-    background: rgba(0, 255, 170, 0.08);
-    border: 1px solid rgba(0, 255, 170, 0.2);
+    background: hsla(160, 84%, 39%, );
+    border: 1px solid hsla(160, 84%, 39%, );
     border-radius: 8px;
-    color: #00ffaa;
+    color: var(--primary);
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
@@ -58,8 +58,8 @@
 }
 
 .about-team-page .at-back-btn:hover {
-    background: rgba(0, 255, 170, 0.15);
-    border-color: rgba(0, 255, 170, 0.4);
+    background: hsla(160, 84%, 39%, );
+    border-color: hsla(160, 84%, 39%, );
     transform: translateX(-3px);
 }
 
@@ -78,7 +78,7 @@
     transform: translateX(-50%);
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 255, 170, 0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, hsla(160, 84%, 39%, ) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -88,7 +88,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 3px;
-    color: #00ffaa;
+    color: var(--primary);
     text-transform: uppercase;
     margin-bottom: 1.2rem;
 }
@@ -103,7 +103,7 @@
 }
 
 .at-hero-title .highlight {
-    color: #00ffaa;
+    color: var(--primary);
 }
 
 .at-hero-subtitle {
@@ -134,7 +134,7 @@
 /* ---- Individual Card ---- */
 .at-card {
     background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(0, 255, 170, 0.12);
+    border: 1px solid hsla(160, 84%, 39%, );
     border-radius: 16px;
     padding: 2.5rem 2rem 2rem;
     display: flex;
@@ -153,15 +153,15 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, transparent, #00ffaa, transparent);
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
     opacity: 0;
     transition: opacity 0.35s ease;
 }
 
 .at-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(0, 255, 170, 0.3);
-    box-shadow: 0 12px 40px rgba(0, 255, 170, 0.08);
+    border-color: hsla(160, 84%, 39%, );
+    box-shadow: 0 12px 40px hsla(160, 84%, 39%, );
 }
 
 .at-card:hover::before {
@@ -173,7 +173,7 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #00ffaa, #00cc88);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,7 +181,7 @@
     font-weight: 800;
     color: #0a0f1a;
     margin-bottom: 1.2rem;
-    box-shadow: 0 4px 20px rgba(0, 255, 170, 0.25);
+    box-shadow: 0 4px 20px hsla(160, 84%, 39%, );
     position: relative;
 }
 
@@ -190,7 +190,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 50%;
-    border: 2px solid rgba(0, 255, 170, 0.2);
+    border: 2px solid hsla(160, 84%, 39%, );
 }
 
 /* ---- Card Text ---- */
@@ -204,7 +204,7 @@
 .at-card-roll {
     font-size: 0.85rem;
     font-weight: 500;
-    color: #00ffaa;
+    color: var(--primary);
     margin-bottom: 1.2rem;
     letter-spacing: 0.5px;
 }
@@ -232,7 +232,7 @@
 }
 
 .at-info-row .at-info-icon {
-    color: #00ffaa;
+    color: var(--primary);
     flex-shrink: 0;
 }
 
@@ -242,10 +242,10 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 1.4rem;
-    background: rgba(0, 255, 170, 0.08);
-    border: 1px solid rgba(0, 255, 170, 0.2);
+    background: hsla(160, 84%, 39%, );
+    border: 1px solid hsla(160, 84%, 39%, );
     border-radius: 8px;
-    color: #00ffaa;
+    color: var(--primary);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -255,17 +255,17 @@
 }
 
 .at-github-btn:hover {
-    background: rgba(0, 255, 170, 0.18);
-    border-color: rgba(0, 255, 170, 0.5);
+    background: hsla(160, 84%, 39%, );
+    border-color: hsla(160, 84%, 39%, );
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 255, 170, 0.15);
+    box-shadow: 0 4px 15px hsla(160, 84%, 39%, );
 }
 
 /* ---- Footer ---- */
 .at-footer {
     text-align: center;
     padding: 2rem;
-    border-top: 1px solid rgba(0, 255, 170, 0.08);
+    border-top: 1px solid hsla(160, 84%, 39%, );
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.3);
 }

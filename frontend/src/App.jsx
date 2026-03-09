@@ -9,6 +9,11 @@ import CoachDashboard from './pages/CoachDashboard';
 import MedicalDashboard from './pages/MedicalDashboard';
 import PredictionsPage from './pages/PredictionsPage';
 import AboutTeam from './pages/AboutTeam';
+import FeaturesPage from './pages/FeaturesPage';
+import HowItWorksPage from './pages/HowItWorksPage';
+import ReportsPage from './pages/ReportsPage';
+import RecoveryProgressReport from './components/reports/RecoveryProgressReport';
+import TeamAvailabilityReport from './components/reports/TeamAvailabilityReport';
 
 function App() {
   return (
@@ -24,6 +29,13 @@ function App() {
           <Route path="/medical-dashboard" element={<MedicalDashboard />} />
           <Route path="/predictions" element={<PredictionsPage />} />
           <Route path="/about-team" element={<AboutTeam />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+
+          {/* Protected Report Routes */}
+          <Route path="/report/recovery-progress" element={<RecoveryProgressReport />} />
+          <Route path="/report/team-availability" element={<TeamAvailabilityReport />} />
         </Routes>
       </div>
     </Router>

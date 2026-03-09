@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Activity, LogOut, Users, HeartPulse, TrendingUp, Stethoscope } from 'lucide-react';
+import { Activity, LogOut, Users, HeartPulse, TrendingUp, Stethoscope, ChevronRight } from 'lucide-react';
 import coachSilhouette from '../assets/silhouettes/coach-silhouette.png';
 import './CoachDashboard.css';
 
@@ -423,6 +423,29 @@ const CoachDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                {/* ── Quick Access Reports ── */}
+                <div className="cd-section" style={{ marginTop: '2rem' }}>
+                    <h3 className="cd-section-title">Reports & Insights</h3>
+                    <div className="cd-stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+                        <button
+                            className="cd-quick-card"
+                            style={{ display: 'flex', alignItems: 'center', padding: '1.5rem', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', cursor: 'pointer', textAlign: 'left', transition: 'box-shadow 0.2s', width: '100%' }}
+                            onClick={() => navigate('/report/team-availability')}
+                            onMouseOver={e => e.currentTarget.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)'}
+                            onMouseOut={e => e.currentTarget.style.boxShadow = 'none'}
+                        >
+                            <div style={{ backgroundColor: '#eef2ff', color: '#4f46e5', padding: '1rem', borderRadius: '12px', marginRight: '1rem' }}>
+                                <Activity size={24} />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <span style={{ display: 'block', fontWeight: '600', color: '#111827', fontSize: '1.125rem', marginBottom: '0.25rem' }}>Team Availability Report</span>
+                                <span style={{ display: 'block', color: '#6b7280', fontSize: '0.875rem' }}>View squad health charts & export to PDF</span>
+                            </div>
+                            <ChevronRight size={20} color="#9ca3af" />
+                        </button>
                     </div>
                 </div>
             </main>

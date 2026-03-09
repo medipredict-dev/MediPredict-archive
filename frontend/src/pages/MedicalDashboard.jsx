@@ -404,6 +404,9 @@ const MedicalDashboard = () => {
                             <button className="md-btn-outline" onClick={() => navigate('/predictions')}>
                                 <Bot size={16} /> AI Prediction Module
                             </button>
+                            <button className="md-btn-outline" style={{ backgroundColor: '#EEF2FF', color: '#4F46E5', borderColor: '#4F46E5' }} onClick={() => navigate('/report/recovery-progress/')}>
+                                <Activity size={16} /> Player Recovery Reports
+                            </button>
                         </div>
                     </div>
                 </div>

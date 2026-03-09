@@ -1,0 +1,352 @@
+.report-wrapper {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #1f2937;
+}
+
+.report-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.btn-download:hover {
+    background-color: #4338ca;
+}
+
+.report-document {
+    background-color: #ffffff;
+    padding: 3rem 4rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.report-header {
+    margin-bottom: 2rem;
+}
+
+.brand-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.brand-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.report-header h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.025em;
+}
+
+.header-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.header-meta p {
+    margin: 0;
+}
+
+.report-divider {
+    border: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 2rem 0;
+}
+
+.report-info-grid {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.info-box {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #f3f4f6;
+}
+
+.box-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: white;
+    border-radius: 50%;
+    color: #4f46e5;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    flex-shrink: 0;
+}
+
+.info-box h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.detail-value {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.detail-sub {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Sections */
+.report-section {
+    margin-bottom: 3rem;
+}
+
+.report-section h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.chart-container-large {
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Summary Banner */
+.summary-banner {
+    display: flex;
+    align-items: stretch;
+    background: linear-gradient(135deg, #4f46e5, #312e81);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    justify-content: space-around;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    text-align: center;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.summary-banner .stat-label {
+    color: #e0e7ff;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-card .stat-number {
+    color: #111827;
+}
+
+.stat-value-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-amber {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.badge-green {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+/* Notes */
+.notes-box,
+.recommendations-box {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #4f46e5;
+    margin-bottom: 1.5rem;
+}
+
+.notes-box p {
+    margin: 0;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.recommendations-box ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #374151;
+}
+
+.recommendations-box li {
+    margin-bottom: 0.5rem;
+}
+
+/* Player Status Table */
+.status-table-container {
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.status-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.status-table th {
+    background-color: #f9fafb;
+    padding: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.status-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    color: #111827;
+    font-size: 0.95rem;
+}
+
+.status-table tr:last-child td {
+    border-bottom: none;
+}
+
+.status-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-available {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.status-recovering {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.status-injured {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.status-cleared {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+/* Footer */
+.report-footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+/* Loading/Error States */
+.report-loading,
+.report-error,
+.report-empty {
+    text-align: center;
+    padding: 4rem;
+    font-size: 1.125rem;
+    color: #6b7280;
+}
+
+.report-error {
+    color: #ef4444;
+}

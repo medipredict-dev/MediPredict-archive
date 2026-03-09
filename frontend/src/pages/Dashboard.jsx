@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { 
+import {
     Activity, LogOut, User, Shield, Stethoscope, TrendingUp, ChevronRight,
     PlusCircle, Calendar, AlertTriangle, CheckCircle, HeartPulse, X,
     Mail, Ruler, Scale, Brain, Clock, Target, Lightbulb
@@ -36,7 +36,7 @@ const Dashboard = () => {
         } else {
             const userData = JSON.parse(storedUser);
             setUser(userData);
-            
+
             // Fetch player data if user is a player
             const isPlayer = userData.roles?.some(r => r.name === 'Player') || userData.role === 'Player';
             if (isPlayer) {
@@ -51,7 +51,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            
+
             // Fetch profile and injuries in parallel
             const [profileRes, injuriesRes] = await Promise.allSettled([
                 axios.get('http://localhost:5000/api/player-profile/me', config),
@@ -427,49 +427,60 @@ const Dashboard = () => {
                 </div>
 
                 {/* Quick Access Cards */}
-                {(isCoach || isAdmin || isMedical) && (
-                    <div className="db-section">
-                        <p className="db-section-label">QUICK ACCESS</p>
-                        <div className="db-quick-grid">
-                            {(isCoach || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/coach-dashboard')}>
-                                    <div className="db-quick-icon">
-                                        <TrendingUp size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">Coach Dashboard</span>
-                                        <span className="db-quick-desc">Team health, training loads & injury view</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                            {(isMedical || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/medical-dashboard')}>
-                                    <div className="db-quick-icon">
-                                        <Stethoscope size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">Medical Dashboard</span>
-                                        <span className="db-quick-desc">Manage injury records & recovery plans</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                            {(isMedical || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/predictions')}>
-                                    <div className="db-quick-icon">
-                                        <Activity size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">AI Prediction Module</span>
-                                        <span className="db-quick-desc">Generate & review recovery predictions</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                        </div>
+                <div className="db-section">
+                    <p className="db-section-label">REPORTS & INSIGHTS</p>
+                    <div className="db-quick-grid">
+                        {isPlayer && (
+                            <button className="db-quick-card" onClick={() => navigate('/report/recovery-progress')}>
+                                <div className="db-quick-icon">
+                                    <Activity size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Recovery Progress</span>
+                                    <span className="db-quick-desc">View your detailed recovery timeline & PDF</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isCoach || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/coach-dashboard')}>
+                                <div className="db-quick-icon">
+                                    <TrendingUp size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Coach Dashboard</span>
+                                    <span className="db-quick-desc">Team health, training loads & injury view</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isMedical || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/medical-dashboard')}>
+                                <div className="db-quick-icon">
+                                    <Stethoscope size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Medical Dashboard</span>
+                                    <span className="db-quick-desc">Manage injury records & recovery plans</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isMedical || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/predictions')}>
+                                <div className="db-quick-icon">
+                                    <Activity size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">AI Prediction Module</span>
+                                    <span className="db-quick-desc">Generate & review recovery predictions</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
                     </div>
-                )}
+                </div>
+
             </main>
 
             {/* Add Injury Modal */}
@@ -546,14 +557,14 @@ const Dashboard = () => {
 
                             <div className="db-form-group">
                                 <label className="db-label">Description *</label>
-                                <textarea 
-                                    name="description" 
+                                <textarea
+                                    name="description"
                                     value={formData.description}
-                                    onChange={handleInputChange} 
+                                    onChange={handleInputChange}
                                     className="db-textarea"
-                                    placeholder="Describe how the injury occurred and symptoms…" 
-                                    rows="3" 
-                                    required 
+                                    placeholder="Describe how the injury occurred and symptoms…"
+                                    rows="3"
+                                    required
                                 />
                             </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, ArrowLeft, Mail, Phone, Github } from 'lucide-react';
+import { Mail, Phone, Github } from 'lucide-react';
+import MainNavbar from '../components/MainNavbar';
 import './AboutTeam.css';
 
 const teamMembers = [
@@ -36,70 +37,61 @@ const AboutTeam = () => {
     return (
         <div className="about-team-page">
             {/* Navbar */}
-            <nav className="at-nav">
-                <div className="at-nav-brand" onClick={() => navigate('/')}>
-                    <Activity className="brand-icon" size={24} />
-                    <span className="brand-text">
-                        Medi<span className="brand-highlight">Predict</span>
-                    </span>
-                </div>
-                <button className="at-back-btn" onClick={() => navigate('/')}>
-                    <ArrowLeft size={16} />
-                    Back to Home
-                </button>
-            </nav>
+            <MainNavbar />
 
-            {/* Hero Header */}
-            <section className="at-hero">
-                <span className="at-hero-label">OUR TEAM</span>
-                <h1 className="at-hero-title">
-                    Meet the <span className="highlight">Team</span>
-                </h1>
-                <p className="at-hero-subtitle">
-                    A passionate team of developers building AI-powered sports injury recovery predictions.
-                </p>
-            </section>
+            <div style={{ paddingTop: '6rem', paddingBottom: '4rem', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Hero Header */}
+                <section className="at-hero">
+                    <span className="at-hero-label">OUR TEAM</span>
+                    <h1 className="at-hero-title">
+                        Meet the <span className="highlight">Team</span>
+                    </h1>
+                    <p className="at-hero-subtitle">
+                        A passionate team of developers building AI-powered sports injury recovery predictions.
+                    </p>
+                </section>
 
-            {/* Team Cards */}
-            <div className="at-team-grid">
-                {teamMembers.map((member, index) => (
-                    <div className="at-card" key={index}>
-                        {/* Avatar */}
-                        <div className="at-avatar">{member.initials}</div>
+                {/* Team Cards */}
+                <div className="at-team-grid">
+                    {teamMembers.map((member, index) => (
+                        <div className="at-card" key={index}>
+                            {/* Avatar */}
+                            <div className="at-avatar">{member.initials}</div>
 
-                        {/* Name & Roll */}
-                        <h3 className="at-card-name">{member.name}</h3>
-                        <p className="at-card-roll">{member.roll}</p>
+                            {/* Name & Roll */}
+                            <h3 className="at-card-name">{member.name}</h3>
+                            <p className="at-card-roll">{member.roll}</p>
 
-                        {/* Info Rows */}
-                        <div className="at-info-list">
-                            <div className="at-info-row">
-                                <Mail size={15} className="at-info-icon" />
-                                <span>{member.email}</span>
+                            {/* Info Rows */}
+                            <div className="at-info-list">
+                                <div className="at-info-row">
+                                    <Mail size={15} className="at-info-icon" />
+                                    <span>{member.email}</span>
+                                </div>
+                                <div className="at-info-row">
+                                    <Phone size={15} className="at-info-icon" />
+                                    <span>{member.phone}</span>
+                                </div>
                             </div>
-                            <div className="at-info-row">
-                                <Phone size={15} className="at-info-icon" />
-                                <span>{member.phone}</span>
-                            </div>
+
+                            {/* GitHub Button */}
+                            <a
+                                href={member.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="at-github-btn"
+                            >
+                                <Github size={16} />
+                                View GitHub
+                            </a>
                         </div>
+                    ))}
+                </div>
 
-                        {/* GitHub Button */}
-                        <a
-                            href={member.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="at-github-btn"
-                        >
-                            <Github size={16} />
-                            View GitHub
-                        </a>
-                    </div>
-                ))}
-            </div>
-
-            {/* Footer */}
-            <div className="at-footer">
-                © 2026 MediPredict. All rights reserved.
+                {/* Footer */}
+                <div className="at-footer" style={{ width: '100%' }}>
+                    © 2026 MediPredict. All rights reserved.
+                </div>
             </div>
         </div>
     );
