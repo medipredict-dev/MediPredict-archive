@@ -4,7 +4,7 @@ import axios from 'axios';
 import { 
     Activity, LogOut, User, Shield, Stethoscope, TrendingUp, ChevronRight,
     PlusCircle, Calendar, AlertTriangle, CheckCircle, HeartPulse, X,
-    Mail, Ruler, Scale
+    Mail, Ruler, Scale, Brain, Clock, Target, Lightbulb
 } from 'lucide-react';
 import playerSilhouette from '../assets/silhouettes/player-silhouette.png';
 import './Dashboard.css';
@@ -14,6 +14,9 @@ const Dashboard = () => {
     const [playerProfile, setPlayerProfile] = useState(null);
     const [injuries, setInjuries] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showPredictionModal, setShowPredictionModal] = useState(false);
+    const [predictionResult, setPredictionResult] = useState(null);
+    const [submittingInjury, setSubmittingInjury] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
@@ -77,17 +80,32 @@ const Dashboard = () => {
     const handleAddInjury = async (e) => {
         e.preventDefault();
         try {
+            setSubmittingInjury(true);
             const token = user?.token;
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.post('http://localhost:5000/api/player-profile/injuries', formData, config);
+            const response = await axios.post('http://localhost:5000/api/player-profile/injuries', formData, config);
+            
+            // Store the prediction result
+            const { injury, prediction, aiPowered } = response.data;
+            setPredictionResult({
+                injury: injury || response.data,
+                prediction: prediction,
+                aiPowered: aiPowered
+            });
+            
             setShowAddModal(false);
             resetForm();
             setError('');
             fetchPlayerData(token);
+            
+            // Show prediction modal
+            setShowPredictionModal(true);
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Failed to submit injury';
             setError(errorMsg);
             console.error('Add injury error:', err.response?.data || err);
+        } finally {
+            setSubmittingInjury(false);
         }
     };
 
@@ -543,9 +561,115 @@ const Dashboard = () => {
                                 <button type="button" className="db-btn-cancel" onClick={() => { setShowAddModal(false); resetForm(); }}>
                                     Cancel
                                 </button>
-                                <button type="submit" className="db-btn-submit">Submit Injury Report</button>
+                                <button type="submit" className="db-btn-submit" disabled={submittingInjury}>
+                                    {submittingInjury ? (
+                                        <>
+                                            <span className="db-btn-spinner"></span>
+                                            Analyzing with AI...
+                                        </>
+                                    ) : 'Submit Injury Report'}
+                                </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* AI Prediction Result Modal */}
+            {showPredictionModal && predictionResult && (
+                <div className="db-modal-overlay">
+                    <div className="db-modal db-prediction-modal">
+                        <div className="db-modal-header db-prediction-header">
+                            <div className="db-prediction-title-wrap">
+                                <Brain size={24} className="db-prediction-icon" />
+                                <h2 className="db-modal-title">AI Recovery Prediction</h2>
+                            </div>
+                            <button className="db-modal-close" onClick={() => setShowPredictionModal(false)}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        
+                        <div className="db-prediction-content">
+                            {predictionResult.aiPowered && (
+                                <div className="db-ai-badge">
+                                    <Brain size={14} />
+                                    <span>Powered by Gemini AI</span>
+                                </div>
+                            )}
+                            
+                            <div className="db-prediction-main">
+                                <div className="db-prediction-days">
+                                    <Clock size={32} />
+                                    <div className="db-prediction-days-text">
+                                        <span className="db-prediction-days-number">
+                                            {predictionResult.prediction?.predictedDays || '—'}
+                                        </span>
+                                        <span className="db-prediction-days-label">Estimated Days to Recovery</span>
+                                    </div>
+                                </div>
+                                
+                                {predictionResult.prediction?.confidenceScore && (
+                                    <div className="db-prediction-confidence">
+                                        <Target size={18} />
+                                        <div className="db-confidence-bar-wrap">
+                                            <div className="db-confidence-bar">
+                                                <div 
+                                                    className="db-confidence-fill" 
+                                                    style={{ width: `${predictionResult.prediction.confidenceScore}%` }}
+                                                ></div>
+                                            </div>
+                                            <span className="db-confidence-value">
+                                                {predictionResult.prediction.confidenceScore}% Confidence
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {predictionResult.prediction?.recoveryRangeMin && predictionResult.prediction?.recoveryRangeMax && (
+                                <div className="db-prediction-range">
+                                    <span className="db-range-label">Recovery Range:</span>
+                                    <span className="db-range-value">
+                                        {predictionResult.prediction.recoveryRangeMin} - {predictionResult.prediction.recoveryRangeMax} days
+                                    </span>
+                                </div>
+                            )}
+                            
+                            {predictionResult.prediction?.recommendations && (
+                                <div className="db-prediction-section">
+                                    <div className="db-prediction-section-header">
+                                        <Lightbulb size={18} />
+                                        <span>Recommendations</span>
+                                    </div>
+                                    <p className="db-prediction-text">{predictionResult.prediction.recommendations}</p>
+                                </div>
+                            )}
+                            
+                            {predictionResult.prediction?.riskFactors && (
+                                <div className="db-prediction-section db-prediction-risk">
+                                    <div className="db-prediction-section-header">
+                                        <AlertTriangle size={18} />
+                                        <span>Risk Factors</span>
+                                    </div>
+                                    <p className="db-prediction-text">{predictionResult.prediction.riskFactors}</p>
+                                </div>
+                            )}
+                            
+                            <div className="db-prediction-injury-summary">
+                                <h4>Injury Recorded</h4>
+                                <div className="db-prediction-injury-details">
+                                    <span><strong>Type:</strong> {predictionResult.injury?.injuryType}</span>
+                                    <span><strong>Body Part:</strong> {predictionResult.injury?.bodyPart}</span>
+                                    <span><strong>Severity:</strong> {predictionResult.injury?.severity}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="db-modal-actions">
+                            <button className="db-btn-submit" onClick={() => setShowPredictionModal(false)}>
+                                Got it!
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

@@ -758,6 +758,215 @@
     background: hsl(160, 84%, 44%);
 }
 
+.db-btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.db-btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top-color: var(--primary-fg);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   AI PREDICTION MODAL
+   ============================================ */
+.db-prediction-modal {
+    max-width: 520px;
+}
+
+.db-prediction-header {
+    background: linear-gradient(135deg, hsla(160, 84%, 39%, 0.1), hsla(174, 62%, 47%, 0.1));
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin: -1.5rem -1.5rem 1.5rem;
+    padding: 1.5rem;
+}
+
+.db-prediction-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.db-prediction-icon {
+    color: var(--primary);
+}
+
+.db-prediction-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.db-ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, hsla(160, 84%, 39%, 0.15), hsla(174, 62%, 47%, 0.15));
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.4rem 0.75rem;
+    border-radius: 2rem;
+    width: fit-content;
+}
+
+.db-prediction-main {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.db-prediction-days {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--primary);
+}
+
+.db-prediction-days-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.db-prediction-days-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.db-prediction-days-label {
+    font-size: 0.85rem;
+    color: var(--muted-fg);
+    margin-top: 0.25rem;
+}
+
+.db-prediction-confidence {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted-fg);
+}
+
+.db-confidence-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.db-confidence-bar {
+    height: 8px;
+    background: var(--muted);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.db-confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.db-confidence-value {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+.db-prediction-range {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--secondary);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+}
+
+.db-range-label {
+    color: var(--muted-fg);
+}
+
+.db-range-value {
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.db-prediction-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+.db-prediction-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.db-prediction-text {
+    color: var(--foreground);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.db-prediction-risk .db-prediction-section-header {
+    color: hsl(45, 90%, 60%);
+}
+
+.db-prediction-injury-summary {
+    background: var(--secondary);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+.db-prediction-injury-summary h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-fg);
+    margin: 0 0 0.75rem 0;
+}
+
+.db-prediction-injury-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.875rem;
+}
+
+.db-prediction-injury-details span {
+    color: var(--foreground);
+}
+
+.db-prediction-injury-details strong {
+    color: var(--muted-fg);
+    font-weight: 500;
+}
+
 /* ============================================
    RESPONSIVE
    ============================================ */

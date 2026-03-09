@@ -1,13 +1,14 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css';
 import heroIllustration from '../assets/hero-illustration.png';
-import { Activity, ArrowRight, Play, Clock, Brain, LayoutGrid, BarChart3, ClipboardList, Cpu, CalendarCheck, TrendingUp, UserRound, ShieldCheck, Stethoscope } from 'lucide-react';
+import { Activity, ArrowRight, Play, Clock, Brain, LayoutGrid, BarChart3, ClipboardList, Cpu, CalendarCheck, TrendingUp, UserRound, ShieldCheck, Stethoscope, X, ExternalLink, BookOpen, FileText, GraduationCap } from 'lucide-react';
 
 const MainPage = () => {
     const navigate = useNavigate();
     const navLinksRef = useRef(null);
     const highlightRef = useRef(null);
+    const [showLearnMore, setShowLearnMore] = useState(false);
 
     const handleLinkHover = useCallback((e) => {
         const link = e.currentTarget;
@@ -143,7 +144,7 @@ const MainPage = () => {
                                 Get Started
                                 <ArrowRight size={18} />
                             </button>
-                            <button className="btn-secondary">
+                            <button className="btn-secondary" onClick={() => setShowLearnMore(true)}>
                                 <Play size={18} />
                                 Learn More
                             </button>
@@ -392,6 +393,93 @@ const MainPage = () => {
                     </div>
                 </div>
             </footer>
+
+            {/* Learn More Modal */}
+            {showLearnMore && (
+                <div className="learn-more-overlay" onClick={() => setShowLearnMore(false)}>
+                    <div className="learn-more-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="learn-more-close" onClick={() => setShowLearnMore(false)}>
+                            <X size={24} />
+                        </button>
+                        
+                        <div className="learn-more-header">
+                            <BookOpen className="learn-more-icon" size={40} />
+                            <h2>Research & Resources</h2>
+                            <p>Explore the science behind sports injury prediction</p>
+                        </div>
+
+                        <div className="learn-more-content">
+                            <div className="articles-section">
+                                <h3><GraduationCap size={20} /> Academic Research</h3>
+                                
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=machine+learning+sports+injury+prediction" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>Machine Learning in Sports Injury Prediction</h4>
+                                        <p>Browse peer-reviewed research on ML approaches for predicting sports injuries, analyzing training load, biomechanics, and athlete history.</p>
+                                        <span className="article-source">PubMed - National Library of Medicine</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+
+                                <a href="https://bjsm.bmj.com/" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>British Journal of Sports Medicine</h4>
+                                        <p>Leading peer-reviewed journal covering sports medicine, injury prevention, and return-to-play protocols for athletes.</p>
+                                        <span className="article-source">BMJ Publishing Group</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+
+                                <a href="https://www.frontiersin.org/journals/sports-and-active-living" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>Frontiers in Sports and Active Living</h4>
+                                        <p>Open-access journal publishing research on sports science, athlete performance, and injury rehabilitation.</p>
+                                        <span className="article-source">Frontiers Media</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+                            </div>
+
+                            <div className="articles-section">
+                                <h3><FileText size={20} /> Industry Resources</h3>
+                                
+                                <a href="https://www.acsm.org/" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>American College of Sports Medicine</h4>
+                                        <p>World's largest sports medicine organization providing guidelines, certifications, and research on athlete health.</p>
+                                        <span className="article-source">ACSM</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+
+                                <a href="https://sportsmedres.org/" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>Sports Medicine Research</h4>
+                                        <p>Evidence-based summaries of sports medicine research for clinicians and healthcare professionals.</p>
+                                        <span className="article-source">SMR</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+
+                                <a href="https://www.jospt.org/" target="_blank" rel="noopener noreferrer" className="article-card">
+                                    <div className="article-info">
+                                        <h4>Journal of Orthopaedic & Sports Physical Therapy</h4>
+                                        <p>Clinical research on musculoskeletal conditions, rehabilitation protocols, and return-to-sport guidelines.</p>
+                                        <span className="article-source">JOSPT</span>
+                                    </div>
+                                    <ExternalLink size={18} className="article-link-icon" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="learn-more-footer">
+                            <button className="btn-primary" onClick={() => { setShowLearnMore(false); navigate('/register'); }}>
+                                Get Started <ArrowRight size={18} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

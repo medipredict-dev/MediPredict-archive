@@ -954,3 +954,226 @@ h6 {
         text-align: center;
     }
 }
+
+/* ============================================
+   LEARN MORE MODAL
+   ============================================ */
+.learn-more-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.learn-more-modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.learn-more-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--muted);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--muted-foreground);
+    transition: all 0.2s ease;
+}
+
+.learn-more-close:hover {
+    background: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.learn-more-header {
+    text-align: center;
+    padding: 2.5rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.learn-more-icon {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.learn-more-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+.learn-more-header p {
+    color: var(--muted-foreground);
+    font-size: 1rem;
+}
+
+.learn-more-content {
+    padding: 2rem;
+}
+
+.articles-section {
+    margin-bottom: 2rem;
+}
+
+.articles-section:last-child {
+    margin-bottom: 0;
+}
+
+.articles-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.article-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--muted);
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.article-card:last-child {
+    margin-bottom: 0;
+}
+
+.article-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary);
+    transform: translateX(4px);
+}
+
+.article-info {
+    flex: 1;
+}
+
+.article-info h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+}
+
+.article-info p {
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.article-source {
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.article-link-icon {
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.article-card:hover .article-link-icon {
+    color: var(--primary);
+}
+
+.learn-more-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+}
+
+.learn-more-footer .btn-primary {
+    padding: 0.875rem 2rem;
+}
+
+/* Learn More Modal Responsive */
+@media (max-width: 640px) {
+    .learn-more-overlay {
+        padding: 1rem;
+    }
+
+    .learn-more-modal {
+        max-height: 90vh;
+    }
+
+    .learn-more-header {
+        padding: 2rem 1.5rem 1.25rem;
+    }
+
+    .learn-more-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .learn-more-content {
+        padding: 1.5rem;
+    }
+
+    .article-card {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .article-link-icon {
+        align-self: flex-end;
+    }
+}

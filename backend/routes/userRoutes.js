@@ -5,9 +5,13 @@ const {
     getUserById,
     updateUser,
     deleteUser,
-    assignRole
+    assignRole,
+    getCoaches
 } = require('../controllers/userController');
 const { protect, restrictTo } = require('../middleware/authMiddleware');
+
+// Public route - for player registration
+router.get('/coaches', getCoaches);
 
 router.route('/')
     .get(protect, restrictTo('Admin', 'Coach'), getUsers);
