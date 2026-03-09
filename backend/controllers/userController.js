@@ -125,11 +125,35 @@ const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 }
 
+// @desc    Get all coaches (for player registration)
+// @route   GET /api/users/coaches
+// @access  Public
+const getCoaches = async (req, res) => {
+    try {
+        // Find the Coach role
+        const coachRole = await Role.findOne({ name: 'Coach' });
+        if (!coachRole) {
+            return res.status(200).json([]);
+        }
+
+        // Find all users with Coach role
+        const coaches = await User.find({ roles: coachRole._id })
+            .select('_id name email')
+            .sort({ name: 1 });
+
+        res.status(200).json(coaches);
+    } catch (error) {
+        console.error('getCoaches error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 module.exports = {
     getUsers,
     getUserById,
     updateUser,
     deleteUser,
-    assignRole
+    assignRole,
+    getCoaches
 };
