@@ -207,34 +207,9 @@ const getAllPlayers = async (req, res) => {
             return res.status(404).json({ message: 'Player role not found' });
         }
 
-        // Use aggregation to find users with 'Player' role WHO ALSO HAVE a PlayerProfile
-        const players = await User.aggregate([
-            {
-                $match: { roles: playerRole._id }
-            },
-            {
-                $lookup: {
-                    from: 'playerprofiles',
-                    localField: '_id',
-                    foreignField: 'userId',
-                    as: 'profile'
-                }
-            },
-            {
-                $match: { 'profile.0': { $exists: true } }
-            },
-            {
-                $project: {
-                    name: 1,
-                    email: 1,
-                    team: 1,
-                    position: 1
-                }
-            },
-            {
-                $sort: { name: 1 }
-            }
-        ]);
+        const players = await User.find({ roles: playerRole._id })
+            .select('name email team position')
+            .sort({ name: 1 });
 
         res.json(players);
     } catch (error) {
