@@ -5,7 +5,7 @@ import MainNavbar from '../components/MainNavbar';
 import './MainPage.css';
 
 const HowItWorksPage = () => {
-    const navigate = useNavigate();
+    // Unused navigate hook removed to pass linting
 
     const steps = [
         {

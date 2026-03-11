@@ -16,6 +16,9 @@ router.get('/coaches', getCoaches);
 router.route('/')
     .get(protect, restrictTo('Admin', 'Coach'), getUsers);
 
+router.route('/coaches')
+    .get(getCoaches);
+
 router.route('/:id')
     .get(protect, getUserById)
     .put(protect, updateUser)

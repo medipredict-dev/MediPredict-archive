@@ -83,11 +83,13 @@ const PredictionsPage = () => {
     useEffect(() => {
         fetchPlayers();
         fetchInjuries();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Load predictions separately when the search term changes
     useEffect(() => {
         fetchPredictions();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm]);
 
     const handleInputChange = (e) => {
