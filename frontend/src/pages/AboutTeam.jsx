@@ -49,6 +49,21 @@ const AboutTeam = () => {
         return () => targets.forEach(el => observer.unobserve(el));
     }, []);
 
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const targets = document.querySelectorAll('.animate-on-scroll');
+        targets.forEach(el => observer.observe(el));
+
+        return () => targets.forEach(el => observer.unobserve(el));
+    }, []);
+
     return (
         <div className="about-team-page">
             {/* Navbar */}

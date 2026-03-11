@@ -6,8 +6,7 @@ const {
     getUserById,
     updateUser,
     deleteUser,
-    assignRole,
-    getCoaches
+    assignRole
 } = require('../controllers/userController');
 const { protect, restrictTo } = require('../middleware/authMiddleware');
 

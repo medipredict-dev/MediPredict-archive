@@ -997,9 +997,9 @@ h6 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: hsla(220, 20%, 5%, 0.8);
+    background: rgba(10, 15, 26, 0.85);
+    /* Adjusting back to theme */
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     z-index: 2000;
     display: flex;
     align-items: center;
@@ -1028,7 +1028,7 @@ h6 {
     overflow-y: auto;
     position: relative;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    animation: slideUp 0.3s ease;
+    animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
@@ -1050,8 +1050,7 @@ h6 {
     background: transparent;
     border: none;
     color: var(--muted-foreground);
-    cursor: pointer;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
     z-index: 10;
 }
 
@@ -1167,6 +1166,10 @@ h6 {
     background: hsla(220, 16%, 12%, 0.3);
 }
 
+.learn-more-footer .btn-primary {
+    padding: 0.875rem 2rem;
+}
+
 @media (max-width: 768px) {
     .learn-more-overlay {
         padding: 1rem;
@@ -1182,6 +1185,16 @@ h6 {
 
     .article-card {
         padding: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .learn-more-modal {
+        max-height: 90vh;
+    }
+
+    .learn-more-header {
+        padding: 2.5rem 1.5rem 1.5rem;
     }
 }
 
@@ -1298,4 +1311,8 @@ h6 {
 
 .chart-bar.is-animated:nth-of-type(4) {
     animation-delay: 0.7s;
+}
+
+.article-link-icon {
+    align-self: flex-end;
 }
