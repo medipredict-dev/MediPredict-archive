@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// Removed unused useNavigate import
 import MainNavbar from '../components/MainNavbar';
 import './MainPage.css';
 
 const ReportsPage = () => {
-    const navigate = useNavigate();
+    // Unused navigate hook removed to pass linting
 
     return (
         <div className="landing-page">

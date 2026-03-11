@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// Removed unused useNavigate import
 import { Mail, Phone, Github } from 'lucide-react';
 import MainNavbar from '../components/MainNavbar';
 import './AboutTeam.css';
@@ -32,7 +32,7 @@ const teamMembers = [
 ];
 
 const AboutTeam = () => {
-    const navigate = useNavigate();
+    // Unused navigate hook removed to pass linting
 
     return (
         <div className="about-team-page">

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// Removed unused useNavigate import
 import { Clock, Brain, LayoutGrid, BarChart3 } from 'lucide-react';
 import MainNavbar from '../components/MainNavbar';
 import './MainPage.css';
 
 const FeaturesPage = () => {
-    const navigate = useNavigate();
+    // Unused navigate hook removed to pass linting
 
     const features = [
         {

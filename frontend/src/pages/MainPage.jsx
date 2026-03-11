@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainNavbar from '../components/MainNavbar';
 import './MainPage.css';
@@ -7,6 +7,7 @@ import { Activity, ArrowRight, Play, Clock, Brain, LayoutGrid, BarChart3, Clipbo
 
 const MainPage = () => {
     const navigate = useNavigate();
+    const [showLearnMore, setShowLearnMore] = useState(false);
     return (
         <div className="landing-page">
             <MainNavbar />
@@ -165,7 +166,7 @@ const MainPage = () => {
                         <button className="learn-more-close" onClick={() => setShowLearnMore(false)}>
                             <X size={24} />
                         </button>
-                        
+
                         <div className="learn-more-header">
                             <BookOpen className="learn-more-icon" size={40} />
                             <h2>Research & Resources</h2>
@@ -175,7 +176,7 @@ const MainPage = () => {
                         <div className="learn-more-content">
                             <div className="articles-section">
                                 <h3><GraduationCap size={20} /> Academic Research</h3>
-                                
+
                                 <a href="https://pubmed.ncbi.nlm.nih.gov/?term=machine+learning+sports+injury+prediction" target="_blank" rel="noopener noreferrer" className="article-card">
                                     <div className="article-info">
                                         <h4>Machine Learning in Sports Injury Prediction</h4>
@@ -206,7 +207,7 @@ const MainPage = () => {
 
                             <div className="articles-section">
                                 <h3><FileText size={20} /> Industry Resources</h3>
-                                
+
                                 <a href="https://www.acsm.org/" target="_blank" rel="noopener noreferrer" className="article-card">
                                     <div className="article-info">
                                         <h4>American College of Sports Medicine</h4>
