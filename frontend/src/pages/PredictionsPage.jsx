@@ -15,6 +15,7 @@ const PredictionsPage = () => {
 
     // Search state
     const [searchTerm, setSearchTerm] = useState('');
+    const [expandedId, setExpandedId] = useState(null); // To show explanation
 
     const [formData, setFormData] = useState({
         player: '60d5ecb8b392d700153efabc', // Default dummy ObjectIds for testing
@@ -86,11 +87,19 @@ const PredictionsPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Load predictions separately when the search term changes
+    // Load predictions once
     useEffect(() => {
         fetchPredictions();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchTerm]);
+    }, []);
+
+    // Local filtering for search
+    const filteredPredictions = predictions.filter(pred => {
+        const playerName = pred.player?.name || 'Unknown';
+        const playerID = pred.player?._id || pred.player || '';
+        return playerName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+               playerID.toString().toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -194,12 +203,18 @@ const PredictionsPage = () => {
         <div style={{ minHeight: '100vh', backgroundColor: theme.bgMain, color: theme.textMain, padding: '2rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-                <header style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'center' }}>
-                    <ActivitySquare style={{ marginRight: '1rem', color: theme.primary }} size={32} />
-                    <h1 style={{ fontSize: '2.2rem', fontWeight: 'bold', margin: 0, letterSpacing: '-0.5px' }}>
-                        <span style={{ color: theme.textMain }}>AI </span>
-                        <span style={{ color: theme.primary }}>Prediction Module</span>
-                    </h1>
+                <header style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <ActivitySquare style={{ marginRight: '1rem', color: theme.primary }} size={32} />
+                        <h1 style={{ fontSize: '2.2rem', fontWeight: 'bold', margin: 0, letterSpacing: '-0.5px' }}>
+                            <span style={{ color: theme.textMain }}>AI </span>
+                            <span style={{ color: theme.primary }}>Prediction Module</span>
+                        </h1>
+                    </div>
+                    {/* Tooltip or small badge for model status */}
+                    <div style={{ padding: '0.4rem 0.8rem', borderRadius: '20px', background: 'rgba(12, 232, 141, 0.1)', border: `1px solid ${theme.primary}`, fontSize: '0.75rem', color: theme.primary }}>
+                        Model: Random Forest + Gemini Explanation
+                    </div>
                 </header>
 
                 {/* Main Container - Split Layout */}
@@ -295,10 +310,10 @@ const PredictionsPage = () => {
                                 <Search size={16} color={theme.textMuted} style={{ marginRight: '0.5rem' }} />
                                 <input
                                     type="text"
-                                    placeholder="Filter by Player ID..."
+                                    placeholder="Search by Player Name or ID..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    style={{ border: 'none', background: 'transparent', outline: 'none', color: theme.textMain, width: '150px' }}
+                                    style={{ border: 'none', background: 'transparent', outline: 'none', color: theme.textMain, width: '200px' }}
                                 />
                             </div>
                         </div>
@@ -323,48 +338,98 @@ const PredictionsPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {predictions.map(pred => (
-                                            <tr key={pred._id} style={{ borderBottom: `1px solid ${theme.border}`, transition: 'background 0.2s' }}>
-                                                <td style={{ padding: '1rem 0.5rem' }}>
-                                                    <div style={{ fontWeight: '600', color: theme.textMain }}>
-                                                        {players.find(p => p._id === String(pred.player?._id || pred.player))?.name || (pred.player ? String(pred.player?._id || pred.player).slice(-6) : 'Unknown Player')}
-                                                    </div>
-                                                    <div style={{ fontSize: '0.8rem', color: theme.textMuted, marginTop: '0.2rem' }}>
-                                                        {(() => { const inj = injuries.find(i => i._id === String(pred.injury?._id || pred.injury)); return inj ? `${inj.injuryType} - ${inj.bodyPart}` : (pred.injury ? String(pred.injury?._id || pred.injury).slice(-6) : 'Unknown Injury'); })()}
-                                                    </div>
-                                                </td>
-                                                <td style={{ padding: '1rem 0.5rem', color: theme.textMain }}>
-                                                    <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{pred.predictedDays}</span>
-                                                    <div style={{ fontSize: '0.75rem', color: theme.textMuted }}>Range: {pred.recoveryRangeMin}-{pred.recoveryRangeMax}</div>
-                                                </td>
-                                                <td style={{ padding: '1rem 0.5rem' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', color: pred.confidenceScore > 75 ? theme.primary : theme.accentWarning, fontWeight: 'bold' }}>
-                                                        <TrendingUp size={16} style={{ marginRight: '0.4rem' }} />
-                                                        {pred.confidenceScore}%
-                                                    </div>
-                                                </td>
-                                                <td style={{ padding: '1rem 0.5rem' }}>
-                                                    <span style={{
-                                                        padding: '0.25rem 0.75rem',
-                                                        borderRadius: '20px',
-                                                        fontSize: '0.75rem',
-                                                        fontWeight: '600',
-                                                        backgroundColor: pred.status === 'Accurate' ? 'rgba(12, 232, 141, 0.1)' : pred.status === 'Inaccurate' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                                                        color: pred.status === 'Accurate' ? theme.primary : pred.status === 'Inaccurate' ? theme.accentDanger : theme.accentWarning,
-                                                        border: `1px solid ${pred.status === 'Accurate' ? theme.primary : pred.status === 'Inaccurate' ? theme.accentDanger : theme.accentWarning}`
-                                                    }}>
-                                                        {pred.status}
-                                                    </span>
-                                                </td>
-                                                <td style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
-                                                    <button onClick={() => handleEdit(pred)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: theme.textMuted, marginRight: '0.75rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#fff'} onMouseOut={(e) => e.target.style.color = theme.textMuted}>
-                                                        <Edit size={18} />
-                                                    </button>
-                                                    <button onClick={() => handleDelete(pred._id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: theme.textMuted, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = theme.accentDanger} onMouseOut={(e) => e.target.style.color = theme.textMuted}>
-                                                        <Trash2 size={18} />
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                        {filteredPredictions.map(pred => (
+                                            <React.Fragment key={pred._id}>
+                                                <tr 
+                                                    style={{ borderBottom: `1px solid ${theme.border}`, transition: 'background 0.2s', cursor: 'pointer' }}
+                                                    onClick={() => setExpandedId(expandedId === pred._id ? null : pred._id)}
+                                                    onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
+                                                    onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                                                >
+                                                    <td style={{ padding: '1rem 0.5rem' }}>
+                                                        <div style={{ fontWeight: '600', color: theme.textMain }}>
+                                                            {/* Try to get name from populated object, else fallback to searching in players list */}
+                                                            {pred.player?.name || 
+                                                             players.find(p => p._id === String(pred.player?._id || pred.player))?.name || 
+                                                             'Unknown Player'}
+                                                        </div>
+                                                        <div style={{ fontSize: '0.8rem', color: theme.textMuted, marginTop: '0.2rem' }}>
+                                                            {(() => {
+                                                                const inj = pred.injury?.injuryType 
+                                                                    ? pred.injury 
+                                                                    : injuries.find(i => i._id === String(pred.injury?._id || pred.injury));
+                                                                return inj ? `${inj.injuryType} - ${inj.bodyPart}` : '-';
+                                                            })()}
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding: '1rem 0.5rem', color: theme.textMain }}>
+                                                        <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{pred.predictedDays} days</span>
+                                                        <div style={{ fontSize: '0.75rem', color: theme.textMuted }}>Range: {pred.recoveryRangeMin}-{pred.recoveryRangeMax}</div>
+                                                    </td>
+                                                    <td style={{ padding: '1rem 0.5rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', color: pred.confidenceScore > 75 ? theme.primary : theme.accentWarning, fontWeight: 'bold' }}>
+                                                            <TrendingUp size={16} style={{ marginRight: '0.4rem' }} />
+                                                            {pred.confidenceScore}%
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding: '1rem 0.5rem' }}>
+                                                        <span style={{
+                                                            padding: '0.25rem 0.75rem',
+                                                            borderRadius: '20px',
+                                                            fontSize: '0.75rem',
+                                                            fontWeight: '600',
+                                                            backgroundColor: pred.status === 'Accurate' ? 'rgba(12, 232, 141, 0.1)' : pred.status === 'Inaccurate' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                                                            color: pred.status === 'Accurate' ? theme.primary : pred.status === 'Inaccurate' ? theme.accentDanger : theme.accentWarning,
+                                                            border: `1px solid ${pred.status === 'Accurate' ? theme.primary : pred.status === 'Inaccurate' ? theme.accentDanger : theme.accentWarning}`
+                                                        }}>
+                                                            {pred.status}
+                                                        </span>
+                                                    </td>
+                                                    <td style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+                                                            <button 
+                                                                onClick={(e) => { e.stopPropagation(); handleEdit(pred); }} 
+                                                                title="Edit"
+                                                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: theme.textMuted }}
+                                                            >
+                                                                <Edit size={16} />
+                                                            </button>
+                                                            <button 
+                                                                onClick={(e) => { e.stopPropagation(); handleDelete(pred._id); }} 
+                                                                title="Delete"
+                                                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: theme.textMuted }}
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {/* Expanded Row for AI Explanation */}
+                                                {expandedId === pred._id && (
+                                                    <tr>
+                                                        <td colSpan="5" style={{ padding: '0 0.5rem 1rem 0.5rem', backgroundColor: 'rgba(12, 232, 141, 0.03)' }}>
+                                                            <div style={{ 
+                                                                padding: '1.25rem', 
+                                                                borderRadius: '8px', 
+                                                                border: `1px dashed ${theme.primary}`, 
+                                                                marginTop: '0.5rem',
+                                                                fontSize: '0.9rem',
+                                                                lineHeight: '1.6',
+                                                                color: theme.textMain
+                                                            }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem', color: theme.primary, fontWeight: 'bold' }}>
+                                                                    <Activity size={16} style={{ marginRight: '0.5rem' }} />
+                                                                    Explainable AI Insights
+                                                                </div>
+                                                                {pred.explanation || "No detailed explanation available for this record."}
+                                                                <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: theme.textMuted, fontStyle: 'italic' }}>
+                                                                    * This insight is generated by the AI Explanation Layer (Gemini-2.0-Flash) based on model metrics.
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </React.Fragment>
                                         ))}
                                     </tbody>
                                 </table>

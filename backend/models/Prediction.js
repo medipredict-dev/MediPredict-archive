@@ -39,6 +39,10 @@ const predictionSchema = mongoose.Schema({
         enum: ['Pending', 'Accurate', 'Inaccurate'],
         default: 'Pending',
         required: true
+    },
+    explanation: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true
