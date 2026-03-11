@@ -25,6 +25,7 @@ app.use('/api/coach', require('./routes/coachRoutes'));
 app.use('/api/medical', require('./routes/medicalRoutes'));
 app.use('/api/training-load', require('./routes/trainingLoadRoutes'));
 app.use('/api/predictions', require('./routes/predictionRoutes'));
+app.use('/api/reports', require('./routes/reportRoutes'));
 
 // Root route
 app.get('/', (req, res) => {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
     getUsers,
+    getCoaches,
     getUserById,
     updateUser,
     deleteUser,
@@ -11,6 +12,9 @@ const { protect, restrictTo } = require('../middleware/authMiddleware');
 
 router.route('/')
     .get(protect, restrictTo('Admin', 'Coach'), getUsers);
+
+router.route('/coaches')
+    .get(getCoaches);
 
 router.route('/:id')
     .get(protect, getUserById)

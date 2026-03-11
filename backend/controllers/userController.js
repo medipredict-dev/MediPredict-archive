@@ -13,6 +13,25 @@ const getUsers = async (req, res) => {
     }
 };
 
+// @desc    Get all coaches for registration dropdown
+// @route   GET /api/users/coaches
+// @access  Public
+const getCoaches = async (req, res) => {
+    try {
+        const coachRole = await Role.findOne({ name: 'Coach' });
+        if (!coachRole) {
+            return res.status(404).json({ message: 'Coach role not found in DB' });
+        }
+
+        const coaches = await User.find({ roles: coachRole._id })
+            .select('_id name team email');
+
+        res.status(200).json(coaches);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // @desc    Get single user
 // @route   GET /api/users/:id
 // @access  Private (Admin, Coach, Medical, Self)
@@ -128,6 +147,7 @@ const generateToken = (id) => {
 
 module.exports = {
     getUsers,
+    getCoaches,
     getUserById,
     updateUser,
     deleteUser,
