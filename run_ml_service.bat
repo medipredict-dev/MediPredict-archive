@@ -1,0 +1,9 @@
+@echo off
+echo Setting up ML Service...
+cd backend\ml
+pip install pandas scikit-learn flask flask-cors joblib numpy
+echo Training model...
+python train_model.py
+echo Starting Flask app...
+python app.py
+pause
