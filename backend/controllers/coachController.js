@@ -15,8 +15,11 @@ const getTeamPlayers = async (req, res) => {
             return res.status(404).json({ message: 'Player role not found' });
         }
 
-        // Find all users with Player role assigned to this coach
-        const players = await User.find({ roles: playerRole._id, coachId: req.user._id })
+        // Find all users with Player role assigned to THIS coach
+        const players = await User.find({
+            roles: playerRole._id,
+            coachId: req.user._id
+        })
             .select('-password')
             .populate('roles');
 
@@ -62,6 +65,11 @@ const getPlayerDetails = async (req, res) => {
             return res.status(404).json({ message: 'Player not found' });
         }
 
+        // Optional: Ensure the coach actually owns this player
+        if (player.coachId && player.coachId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized to view this player' });
+        }
+
         const profile = await PlayerProfile.findOne({ userId: player._id });
         const injuries = await Injury.find({ playerId: player._id })
             .sort({ createdAt: -1 });
@@ -95,15 +103,18 @@ const getTeamStats = async (req, res) => {
             return res.status(404).json({ message: 'Player role not found' });
         }
 
-        // Strictly filter to players under this coach
-        const players = await User.find({ roles: playerRole._id, coachId: req.user._id });
-        const playerIds = players.map(p => p._id);
+        // Count players assigned to THIS coach
+        const totalPlayers = await User.countDocuments({
+            roles: playerRole._id,
+            coachId: req.user._id
+        });
 
-        const totalPlayers = playerIds.length;
+        // Find all players for this coach to filter injuries
+        const playersIds = await User.find({ roles: playerRole._id, coachId: req.user._id }).distinct('_id');
 
-        // Count players with active injuries among assigned players
+        // Count active injuries for this coach's players
         const activeInjuries = await Injury.find({
-            playerId: { $in: playerIds },
+            playerId: { $in: playersIds },
             status: { $in: ['Active', 'Recovering'] }
         });
         const injuredPlayerIds = [...new Set(activeInjuries.map(i => i.playerId.toString()))];
@@ -131,10 +142,10 @@ const getTeamStats = async (req, res) => {
 // @access  Private (Coach only)
 const getTeamInjuries = async (req, res) => {
     try {
-        const players = await User.find({ coachId: req.user._id });
-        const playerIds = players.map(p => p._id);
+        const playerRole = await Role.findOne({ name: 'Player' });
+        const playersIds = await User.find({ roles: playerRole._id, coachId: req.user._id }).distinct('_id');
 
-        const injuries = await Injury.find({ playerId: { $in: playerIds } })
+        const injuries = await Injury.find({ playerId: { $in: playersIds } })
             .populate('playerId', 'name email team position')
             .populate('addedBy', 'name')
             .sort({ createdAt: -1 });

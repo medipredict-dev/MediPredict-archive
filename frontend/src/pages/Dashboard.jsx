@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { 
+import {
     Activity, LogOut, User, Shield, Stethoscope, TrendingUp, ChevronRight,
     PlusCircle, Calendar, AlertTriangle, CheckCircle, HeartPulse, X,
     Mail, Ruler, Scale, Brain, Clock, Target, Lightbulb
@@ -17,7 +17,7 @@ const Dashboard = () => {
     const [showPredictionModal, setShowPredictionModal] = useState(false);
     const [predictionResult, setPredictionResult] = useState(null);
     const [submittingInjury, setSubmittingInjury] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         injuryType: '',
@@ -36,7 +36,7 @@ const Dashboard = () => {
         } else {
             const userData = JSON.parse(storedUser);
             setUser(userData);
-            
+
             // Fetch player data if user is a player
             const isPlayer = userData.roles?.some(r => r.name === 'Player') || userData.role === 'Player';
             if (isPlayer) {
@@ -51,7 +51,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            
+
             // Fetch profile and injuries in parallel
             const [profileRes, injuriesRes] = await Promise.allSettled([
                 axios.get('http://localhost:5000/api/player-profile/me', config),
@@ -84,7 +84,7 @@ const Dashboard = () => {
             const token = user?.token;
             const config = { headers: { Authorization: `Bearer ${token}` } };
             const response = await axios.post('http://localhost:5000/api/player-profile/injuries', formData, config);
-            
+
             // Store the prediction result
             const { injury, prediction, aiPowered } = response.data;
             setPredictionResult({
@@ -92,12 +92,12 @@ const Dashboard = () => {
                 prediction: prediction,
                 aiPowered: aiPowered
             });
-            
+
             setShowAddModal(false);
             resetForm();
             setError('');
             fetchPlayerData(token);
-            
+
             // Show prediction modal
             setShowPredictionModal(true);
         } catch (err) {
@@ -233,13 +233,13 @@ const Dashboard = () => {
                                     <p className="db-stat-value">{user.name}</p>
                                 </div>
                             </div>
-                            <div className="db-stat-card db-stat-card-wide">
+                            <div className="db-stat-card">
                                 <div className="db-stat-icon-wrap">
                                     <Mail size={20} />
                                 </div>
                                 <div>
                                     <p className="db-stat-label">Email</p>
-                                    <p className="db-stat-value">{user.email}</p>
+                                    <p className="db-stat-value db-email-value">{user.email}</p>
                                 </div>
                             </div>
                             {/* Show profile data if exists */}
@@ -427,49 +427,60 @@ const Dashboard = () => {
                 </div>
 
                 {/* Quick Access Cards */}
-                {(isCoach || isAdmin || isMedical) && (
-                    <div className="db-section">
-                        <p className="db-section-label">QUICK ACCESS</p>
-                        <div className="db-quick-grid">
-                            {(isCoach || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/coach-dashboard')}>
-                                    <div className="db-quick-icon">
-                                        <TrendingUp size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">Coach Dashboard</span>
-                                        <span className="db-quick-desc">Team health, training loads & injury view</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                            {(isMedical || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/medical-dashboard')}>
-                                    <div className="db-quick-icon">
-                                        <Stethoscope size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">Medical Dashboard</span>
-                                        <span className="db-quick-desc">Manage injury records & recovery plans</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                            {(isMedical || isAdmin) && (
-                                <button className="db-quick-card" onClick={() => navigate('/predictions')}>
-                                    <div className="db-quick-icon">
-                                        <Activity size={22} />
-                                    </div>
-                                    <div className="db-quick-text">
-                                        <span className="db-quick-title">AI Prediction Module</span>
-                                        <span className="db-quick-desc">Generate & review recovery predictions</span>
-                                    </div>
-                                    <ChevronRight size={18} className="db-quick-arrow" />
-                                </button>
-                            )}
-                        </div>
+                <div className="db-section">
+                    <p className="db-section-label">REPORTS & INSIGHTS</p>
+                    <div className="db-quick-grid">
+                        {isPlayer && (
+                            <button className="db-quick-card" onClick={() => navigate('/report/recovery-progress')}>
+                                <div className="db-quick-icon">
+                                    <Activity size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Recovery Progress</span>
+                                    <span className="db-quick-desc">View your detailed recovery timeline & PDF</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isCoach || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/coach-dashboard')}>
+                                <div className="db-quick-icon">
+                                    <TrendingUp size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Coach Dashboard</span>
+                                    <span className="db-quick-desc">Team health, training loads & injury view</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isMedical || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/medical-dashboard')}>
+                                <div className="db-quick-icon">
+                                    <Stethoscope size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">Medical Dashboard</span>
+                                    <span className="db-quick-desc">Manage injury records & recovery plans</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
+                        {(isMedical || isAdmin) && (
+                            <button className="db-quick-card" onClick={() => navigate('/predictions')}>
+                                <div className="db-quick-icon">
+                                    <Activity size={22} />
+                                </div>
+                                <div className="db-quick-text">
+                                    <span className="db-quick-title">AI Prediction Module</span>
+                                    <span className="db-quick-desc">Generate & review recovery predictions</span>
+                                </div>
+                                <ChevronRight size={18} className="db-quick-arrow" />
+                            </button>
+                        )}
                     </div>
-                )}
+                </div>
+
             </main>
 
             {/* Add Injury Modal */}
@@ -546,14 +557,14 @@ const Dashboard = () => {
 
                             <div className="db-form-group">
                                 <label className="db-label">Description *</label>
-                                <textarea 
-                                    name="description" 
+                                <textarea
+                                    name="description"
                                     value={formData.description}
-                                    onChange={handleInputChange} 
+                                    onChange={handleInputChange}
                                     className="db-textarea"
-                                    placeholder="Describe how the injury occurred and symptoms…" 
-                                    rows="3" 
-                                    required 
+                                    placeholder="Describe how the injury occurred and symptoms…"
+                                    rows="3"
+                                    required
                                 />
                             </div>
 
@@ -588,7 +599,7 @@ const Dashboard = () => {
                                 <X size={20} />
                             </button>
                         </div>
-                        
+
                         <div className="db-prediction-content">
                             {predictionResult.aiPowered && (
                                 <div className="db-ai-badge">
@@ -596,7 +607,7 @@ const Dashboard = () => {
                                     <span>Powered by Gemini AI</span>
                                 </div>
                             )}
-                            
+
                             <div className="db-prediction-main">
                                 <div className="db-prediction-days">
                                     <Clock size={32} />
@@ -607,14 +618,14 @@ const Dashboard = () => {
                                         <span className="db-prediction-days-label">Estimated Days to Recovery</span>
                                     </div>
                                 </div>
-                                
+
                                 {predictionResult.prediction?.confidenceScore && (
                                     <div className="db-prediction-confidence">
                                         <Target size={18} />
                                         <div className="db-confidence-bar-wrap">
                                             <div className="db-confidence-bar">
-                                                <div 
-                                                    className="db-confidence-fill" 
+                                                <div
+                                                    className="db-confidence-fill"
                                                     style={{ width: `${predictionResult.prediction.confidenceScore}%` }}
                                                 ></div>
                                             </div>
@@ -625,7 +636,7 @@ const Dashboard = () => {
                                     </div>
                                 )}
                             </div>
-                            
+
                             {predictionResult.prediction?.recoveryRangeMin && predictionResult.prediction?.recoveryRangeMax && (
                                 <div className="db-prediction-range">
                                     <span className="db-range-label">Recovery Range:</span>
@@ -634,7 +645,7 @@ const Dashboard = () => {
                                     </span>
                                 </div>
                             )}
-                            
+
                             {predictionResult.prediction?.recommendations && (
                                 <div className="db-prediction-section">
                                     <div className="db-prediction-section-header">
@@ -644,7 +655,7 @@ const Dashboard = () => {
                                     <p className="db-prediction-text">{predictionResult.prediction.recommendations}</p>
                                 </div>
                             )}
-                            
+
                             {predictionResult.prediction?.riskFactors && (
                                 <div className="db-prediction-section db-prediction-risk">
                                     <div className="db-prediction-section-header">
@@ -654,7 +665,7 @@ const Dashboard = () => {
                                     <p className="db-prediction-text">{predictionResult.prediction.riskFactors}</p>
                                 </div>
                             )}
-                            
+
                             <div className="db-prediction-injury-summary">
                                 <h4>Injury Recorded</h4>
                                 <div className="db-prediction-injury-details">
@@ -664,7 +675,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="db-modal-actions">
                             <button className="db-btn-submit" onClick={() => setShowPredictionModal(false)}>
                                 Got it!

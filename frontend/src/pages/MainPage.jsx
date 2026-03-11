@@ -1,120 +1,35 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MainNavbar from '../components/MainNavbar';
 import './MainPage.css';
 import heroIllustration from '../assets/hero-illustration.png';
 import { Activity, ArrowRight, Play, Clock, Brain, LayoutGrid, BarChart3, ClipboardList, Cpu, CalendarCheck, TrendingUp, UserRound, ShieldCheck, Stethoscope, X, ExternalLink, BookOpen, FileText, GraduationCap } from 'lucide-react';
 
 const MainPage = () => {
     const navigate = useNavigate();
-    const navLinksRef = useRef(null);
-    const highlightRef = useRef(null);
     const [showLearnMore, setShowLearnMore] = useState(false);
 
-    const handleLinkHover = useCallback((e) => {
-        const link = e.currentTarget;
-        const container = navLinksRef.current;
-        const highlight = highlightRef.current;
-        if (!container || !highlight) return;
+    // Intersection Observer for scroll animations
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: stop observing once animated
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
 
-        const containerRect = container.getBoundingClientRect();
-        const linkRect = link.getBoundingClientRect();
+        const targets = document.querySelectorAll('.animate-on-scroll, .animate-scale');
+        targets.forEach(el => observer.observe(el));
 
-        highlight.style.width = `${linkRect.width + 16}px`;
-        highlight.style.left = `${linkRect.left - containerRect.left - 8}px`;
-        highlight.style.opacity = '1';
+        return () => targets.forEach(el => observer.unobserve(el));
     }, []);
-
-    const handleNavLeave = useCallback(() => {
-        const highlight = highlightRef.current;
-        if (highlight) {
-            highlight.style.opacity = '0';
-        }
-    }, []);
-
-    const features = [
-        {
-            icon: <Clock size={22} />,
-            title: 'Personalized Recovery Timeline',
-            description: 'Tailored recovery schedules based on individual player data and injury severity.',
-        },
-        {
-            icon: <Brain size={22} />,
-            title: 'AI-Based Prediction Engine',
-            description: 'Machine learning models trained on thousands of sports injury cases.',
-        },
-        {
-            icon: <LayoutGrid size={22} />,
-            title: 'Role-Based Dashboards',
-            description: 'Custom views for players, coaches, and medical staff with relevant insights.',
-        },
-        {
-            icon: <BarChart3 size={22} />,
-            title: 'Injury Analytics & Reports',
-            description: 'Comprehensive analytics with exportable reports for data-driven decisions.',
-        },
-    ];
-
-    const steps = [
-        {
-            icon: <ClipboardList size={24} />,
-            number: 1,
-            title: 'Enter Injury Details',
-            description: 'Input injury type, severity, and player history.',
-        },
-        {
-            icon: <Cpu size={24} />,
-            number: 2,
-            title: 'AI Model Processes Data',
-            description: 'Our engine analyzes patterns from thousands of cases.',
-        },
-        {
-            icon: <CalendarCheck size={24} />,
-            number: 3,
-            title: 'Receive Recovery Timeline',
-            description: 'Get a personalized, evidence-based recovery plan.',
-        },
-        {
-            icon: <TrendingUp size={24} />,
-            number: 4,
-            title: 'Plan Training & Matches',
-            description: 'Optimize return-to-play with actionable insights.',
-        },
-    ];
 
     return (
         <div className="landing-page">
-            {/* Navbar */}
-            <nav className="navbar">
-                <div className="navbar-container">
-                    {/* Logo */}
-                    <div className="navbar-brand">
-                        <Activity className="brand-icon" size={24} />
-                        <span className="brand-text">
-                            Medi<span className="brand-highlight">Predict</span>
-                        </span>
-                    </div>
-
-                    {/* Navigation Links */}
-                    <div className="nav-links" ref={navLinksRef} onMouseLeave={handleNavLeave}>
-                        <div className="nav-highlight" ref={highlightRef}></div>
-                        <a href="#home" onMouseEnter={handleLinkHover}>Home</a>
-                        <a href="#features" onMouseEnter={handleLinkHover}>Features</a>
-                        <a href="#how-it-works" onMouseEnter={handleLinkHover}>How It Works</a>
-                        <a href="#reports" onMouseEnter={handleLinkHover}>Reports</a>
-                        <a onClick={() => navigate('/about-team')} onMouseEnter={handleLinkHover} style={{ cursor: 'pointer' }}>About Team</a>
-                    </div>
-
-                    {/* Auth Buttons */}
-                    <div className="nav-actions">
-                        <button className="btn-signin" onClick={() => navigate('/login')}>
-                            Sign In
-                        </button>
-                        <button className="btn-signup" onClick={() => navigate('/register')}>
-                            Sign Up
-                        </button>
-                    </div>
-                </div>
-            </nav>
+            <MainNavbar />
 
             {/* Hero Section */}
             <section className="hero-section">
@@ -180,47 +95,6 @@ const MainPage = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="features-section" id="features">
-                <div className="features-container">
-                    <span className="features-subtitle">WHY MEDIPREDICT</span>
-                    <h2 className="features-title">Smarter Recovery Starts Here</h2>
-
-                    <div className="features-grid">
-                        {features.map((feature, index) => (
-                            <div className="feature-card" key={index}>
-                                <div className="feature-icon-wrapper">
-                                    {feature.icon}
-                                </div>
-                                <h3 className="feature-card-title">{feature.title}</h3>
-                                <p className="feature-card-desc">{feature.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* How It Works Section */}
-            <section className="how-it-works-section" id="how-it-works">
-                <div className="how-container">
-                    <span className="how-subtitle">PROCESS</span>
-                    <h2 className="how-title">How It Works</h2>
-
-                    <div className="how-steps">
-                        {steps.map((step, index) => (
-                            <div className="step-item" key={index}>
-                                <div className="step-icon-ring">
-                                    {step.icon}
-                                    <span className="step-number">{step.number}</span>
-                                </div>
-                                <h3 className="step-title">{step.title}</h3>
-                                <p className="step-desc">{step.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* Built for Every Role Section */}
             <section className="roles-section">
                 <div className="roles-container">
@@ -228,116 +102,26 @@ const MainPage = () => {
                     <h2 className="roles-title">Built for Every Role</h2>
 
                     <div className="roles-grid">
-                        <div className="role-card">
-                            <div className="role-icon-wrapper">
+                        <div className="role-card animate-on-scroll stagger-delay-1">
+                            <div className="role-icon-wrapper pulse-icon">
                                 <UserRound size={28} />
                             </div>
                             <h3 className="role-card-title">Player</h3>
                             <p className="role-card-desc">Track your recovery progress and get personalized return-to-play timelines.</p>
                         </div>
-                        <div className="role-card">
-                            <div className="role-icon-wrapper">
+                        <div className="role-card animate-on-scroll stagger-delay-2">
+                            <div className="role-icon-wrapper pulse-icon">
                                 <ShieldCheck size={28} />
                             </div>
                             <h3 className="role-card-title">Coach</h3>
                             <p className="role-card-desc">Monitor team availability and plan training schedules around recovery data.</p>
                         </div>
-                        <div className="role-card">
-                            <div className="role-icon-wrapper">
+                        <div className="role-card animate-on-scroll stagger-delay-3">
+                            <div className="role-icon-wrapper pulse-icon">
                                 <Stethoscope size={28} />
                             </div>
                             <h3 className="role-card-title">Medical Staff</h3>
                             <p className="role-card-desc">Access detailed injury analytics, set recovery milestones, and export medical reports.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Reports & Insights Section */}
-            <section className="reports-section" id="reports">
-                <div className="reports-container">
-                    <span className="reports-subtitle">ANALYTICS</span>
-                    <h2 className="reports-title">Reports &amp; Insights</h2>
-
-                    <div className="reports-grid">
-                        {/* Recovery Progress - Line Chart */}
-                        <div className="report-card">
-                            <h3 className="report-card-title">Recovery Progress</h3>
-                            <p className="report-card-desc">Player recovery trajectory over 6 weeks</p>
-                            <div className="chart-area">
-                                <svg viewBox="0 0 400 200" className="line-chart">
-                                    {/* Y-axis labels */}
-                                    <text x="25" y="25" className="chart-label">100</text>
-                                    <text x="30" y="70" className="chart-label">75</text>
-                                    <text x="30" y="115" className="chart-label">50</text>
-                                    <text x="30" y="160" className="chart-label">25</text>
-                                    <text x="38" y="198" className="chart-label">0</text>
-
-                                    {/* Grid lines */}
-                                    <line x1="55" y1="20" x2="390" y2="20" className="chart-grid" />
-                                    <line x1="55" y1="65" x2="390" y2="65" className="chart-grid" />
-                                    <line x1="55" y1="110" x2="390" y2="110" className="chart-grid" />
-                                    <line x1="55" y1="155" x2="390" y2="155" className="chart-grid" />
-                                    <line x1="55" y1="195" x2="390" y2="195" className="chart-grid" />
-
-                                    {/* Line path */}
-                                    <polyline
-                                        points="75,175 140,148 205,115 270,95 335,60 390,22"
-                                        className="chart-line"
-                                    />
-
-                                    {/* Data points */}
-                                    <circle cx="75" cy="175" r="4" className="chart-dot" />
-                                    <circle cx="140" cy="148" r="4" className="chart-dot" />
-                                    <circle cx="205" cy="115" r="4" className="chart-dot" />
-                                    <circle cx="270" cy="95" r="4" className="chart-dot" />
-                                    <circle cx="335" cy="60" r="4" className="chart-dot" />
-                                    <circle cx="390" cy="22" r="4" className="chart-dot" />
-
-                                    {/* X-axis labels */}
-                                    <text x="65" y="215" className="chart-label">Week 1</text>
-                                    <text x="127" y="215" className="chart-label">Week 2</text>
-                                    <text x="192" y="215" className="chart-label">Week 3</text>
-                                    <text x="257" y="215" className="chart-label">Week 4</text>
-                                    <text x="322" y="215" className="chart-label">Week 5</text>
-                                    <text x="377" y="215" className="chart-label">Week 6</text>
-                                </svg>
-                            </div>
-                        </div>
-
-                        {/* Team Availability - Bar Chart */}
-                        <div className="report-card">
-                            <h3 className="report-card-title">Team Availability</h3>
-                            <p className="report-card-desc">Current squad status overview</p>
-                            <div className="chart-area">
-                                <svg viewBox="0 0 400 220" className="bar-chart">
-                                    {/* Y-axis labels */}
-                                    <text x="30" y="25" className="chart-label">20</text>
-                                    <text x="30" y="70" className="chart-label">15</text>
-                                    <text x="30" y="115" className="chart-label">10</text>
-                                    <text x="35" y="160" className="chart-label">5</text>
-                                    <text x="35" y="200" className="chart-label">0</text>
-
-                                    {/* Grid lines */}
-                                    <line x1="55" y1="20" x2="390" y2="20" className="chart-grid" />
-                                    <line x1="55" y1="65" x2="390" y2="65" className="chart-grid" />
-                                    <line x1="55" y1="110" x2="390" y2="110" className="chart-grid" />
-                                    <line x1="55" y1="155" x2="390" y2="155" className="chart-grid" />
-                                    <line x1="55" y1="197" x2="390" y2="197" className="chart-grid" />
-
-                                    {/* Bars */}
-                                    <rect x="80" y="30" width="50" height="167" rx="4" className="chart-bar bar-available" />
-                                    <rect x="165" y="155" width="50" height="42" rx="4" className="chart-bar bar-recovering" />
-                                    <rect x="250" y="165" width="50" height="32" rx="4" className="chart-bar bar-injured" />
-                                    <rect x="335" y="140" width="50" height="57" rx="4" className="chart-bar bar-cleared" />
-
-                                    {/* X-axis labels */}
-                                    <text x="85" y="215" className="chart-label">Available</text>
-                                    <text x="163" y="215" className="chart-label">Recovering</text>
-                                    <text x="258" y="215" className="chart-label">Injured</text>
-                                    <text x="345" y="215" className="chart-label">Cleared</text>
-                                </svg>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -363,9 +147,9 @@ const MainPage = () => {
                         {/* Product Links */}
                         <div className="footer-link-col">
                             <h4 className="footer-col-title">Product</h4>
-                            <a href="#features">Features</a>
-                            <a href="#how-it-works">How It Works</a>
-                            <a href="#reports">Reports</a>
+                            <a onClick={() => navigate('/features')} style={{ cursor: 'pointer' }}>Features</a>
+                            <a onClick={() => navigate('/how-it-works')} style={{ cursor: 'pointer' }}>How It Works</a>
+                            <a onClick={() => navigate('/reports')} style={{ cursor: 'pointer' }}>Reports</a>
                             <a href="#">Pricing</a>
                         </div>
 
@@ -401,7 +185,7 @@ const MainPage = () => {
                         <button className="learn-more-close" onClick={() => setShowLearnMore(false)}>
                             <X size={24} />
                         </button>
-                        
+
                         <div className="learn-more-header">
                             <BookOpen className="learn-more-icon" size={40} />
                             <h2>Research & Resources</h2>
@@ -411,7 +195,7 @@ const MainPage = () => {
                         <div className="learn-more-content">
                             <div className="articles-section">
                                 <h3><GraduationCap size={20} /> Academic Research</h3>
-                                
+
                                 <a href="https://pubmed.ncbi.nlm.nih.gov/?term=machine+learning+sports+injury+prediction" target="_blank" rel="noopener noreferrer" className="article-card">
                                     <div className="article-info">
                                         <h4>Machine Learning in Sports Injury Prediction</h4>
@@ -442,7 +226,7 @@ const MainPage = () => {
 
                             <div className="articles-section">
                                 <h3><FileText size={20} /> Industry Resources</h3>
-                                
+
                                 <a href="https://www.acsm.org/" target="_blank" rel="noopener noreferrer" className="article-card">
                                     <div className="article-info">
                                         <h4>American College of Sports Medicine</h4>

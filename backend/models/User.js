@@ -39,7 +39,8 @@ const userSchema = mongoose.Schema({
     },
     coachId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        default: null
     }
 }, {
     timestamps: true

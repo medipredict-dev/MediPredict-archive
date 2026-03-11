@@ -36,12 +36,9 @@ const registerUser = async (req, res) => {
             name,
             email,
             password,
-            roles: [roleDoc._id]
+            roles: [roleDoc._id],
+            coachId: coachId || null
         };
-
-        if (roleToAssignName === 'Player' && coachId) {
-            userData.coachId = coachId;
-        }
 
         const user = await User.create(userData);
 

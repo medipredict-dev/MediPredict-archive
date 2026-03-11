@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Activity, LogOut, Users, HeartPulse, TrendingUp, Stethoscope } from 'lucide-react';
+import { Activity, LogOut, Users, HeartPulse, TrendingUp, Stethoscope, ChevronRight } from 'lucide-react';
 import coachSilhouette from '../assets/silhouettes/coach-silhouette.png';
 import './CoachDashboard.css';
 
@@ -423,6 +423,26 @@ const CoachDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                {/* ── Quick Access Reports ── */}
+                <div className="cd-section" style={{ marginTop: '2rem' }}>
+                    <h3 className="cd-section-title">Reports & Insights</h3>
+                    <div className="cd-stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+                        <button
+                            className="cd-quick-report-card"
+                            onClick={() => navigate('/report/team-availability')}
+                        >
+                            <div className="cd-quick-report-icon">
+                                <Activity size={24} />
+                            </div>
+                            <div className="cd-quick-report-text">
+                                <span className="cd-quick-report-title">Team Availability Report</span>
+                                <span className="cd-quick-report-desc">View squad health charts & export to PDF</span>
+                            </div>
+                            <ChevronRight size={20} className="cd-quick-report-chevron" />
+                        </button>
                     </div>
                 </div>
             </main>

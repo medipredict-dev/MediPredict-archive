@@ -637,6 +637,80 @@
 }
 
 /* ============================================
+   REPORTS & INSIGHTS CARD
+   ============================================ */
+.cd-quick-report-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--card);
+    /* Base dark card color */
+    border: 1px solid var(--border);
+    /* Subtle dark border */
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2sease;
+    width: 100%;
+    color: var(--foreground);
+    /* Ensure text is light */
+}
+
+.cd-quick-report-card:hover {
+    border-color: hsla(160, 84%, 39%, 0.3);
+    /* Slight primary tint on hover */
+    box-shadow: 0 4px 20px -8px hsla(160, 84%, 39%, 0.15);
+    /* Soft primary glow */
+    background: hsla(220, 16%, 15%, 0.6);
+    /* Slightly lighter background */
+}
+
+.cd-quick-report-icon {
+    background: hsla(160, 84%, 39%, 0.1);
+    /* Soft primary background */
+    color: var(--primary);
+    /* Primary accent color */
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-right: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsla(160, 84%, 39%, 0.2);
+}
+
+.cd-quick-report-text {
+    flex: 1;
+}
+
+.cd-quick-report-title {
+    display: block;
+    font-weight: 600;
+    color: var(--foreground);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.cd-quick-report-desc {
+    display: block;
+    color: var(--muted-fg);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.cd-quick-report-chevron {
+    color: var(--muted-fg);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cd-quick-report-card:hover .cd-quick-report-chevron {
+    transform: translateX(3px);
+    /* Subtle nudge */
+    color: var(--primary);
+}
+
+/* ============================================
    ANIMATE SPINNER
    ============================================ */
 @keyframes cd-spin {
