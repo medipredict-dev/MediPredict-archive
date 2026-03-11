@@ -10,11 +10,11 @@ const {
 } = require('../controllers/userController');
 const { protect, restrictTo } = require('../middleware/authMiddleware');
 
+// Public route - for player registration
+router.get('/coaches', getCoaches);
+
 router.route('/')
     .get(protect, restrictTo('Admin', 'Coach'), getUsers);
-
-router.route('/coaches')
-    .get(getCoaches);
 
 router.route('/:id')
     .get(protect, getUserById)
