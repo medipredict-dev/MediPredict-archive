@@ -23,10 +23,6 @@ Development will begin in later phases.
 - Backend: Node.js / Express (tentative)
 - Database: MongoDB (tentative)
 
----
-
-## Project Status
-🟡 Developement started  
 
 ---
 
